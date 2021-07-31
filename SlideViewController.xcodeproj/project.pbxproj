@@ -83,6 +83,7 @@
 		D75B887C26AF22E200DC2636 = {
 			isa = PBXGroup;
 			children = (
+				D73333C826B6106C00C55711 /* README.md */,
 				D75B888726AF22E300DC2636 /* SlideViewController */,
 				D75B889E26AF22E700DC2636 /* SlideViewControllerTests */,
 				D75B88A926AF22E700DC2636 /* SlideViewControllerUITests */,
@@ -107,7 +108,6 @@
 				D75B888826AF22E300DC2636 /* AppDelegate.swift */,
 				D75B888A26AF22E300DC2636 /* SceneDelegate.swift */,
 				D75B888C26AF22E300DC2636 /* SlideViewController.swift */,
-				D73333C826B6106C00C55711 /* README.md */,
 				D7C6ABE126AF76910097F7CE /* crosshairView.swift */,
 				D75B888E26AF22E300DC2636 /* Main.storyboard */,
 				D75B889126AF22E700DC2636 /* Assets.xcassets */,
