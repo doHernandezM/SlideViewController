@@ -141,133 +141,6 @@ class SlideViewController: UIViewController {
         return newLocationFiltered
     }
     
-    //MARK:Draw code
-    override func viewWillLayoutSubviews() {
-        updateViewLayouts()
-    }
-    override func viewDidLayoutSubviews() {
-        moveSliderTo(newLocation: preciseSliderPosition)
-        sliderView.updateCrosshairLayers()
-    }
-    
-    //Call this after you've made a change to the views or the super.(Called automatically with viewWillLayoutSubviews)
-    func updateViewLayouts() {
-        for (_,viewController) in controllers.enumerated() {
-            if viewController.value != nil {
-                viewController.value!.view.frame = frameForPosition(position: viewController.key)
-            }
-        }
-        
-    }
-    //MARK:View Positions
-    //Return a view frame based on location, primary frame location and number of views
-    func frameForPosition(position:SlideViewPositions) -> CGRect {
-        var newFrame = self.view.bounds
-        let numberOfViews = controllerCount()
-        
-        //Four views, easy
-        switch numberOfViews {
-        case 4:
-            switch position {
-            case .Primary:
-                newFrame = primaryFrame
-            case .Secondary:
-                newFrame = secondaryFrame
-            case .Tertiary:
-                newFrame = tertiaryFrame
-            case .Quaternary:
-                newFrame = quaternaryFrame
-            default:
-                newFrame = CGRect.zero //Always return zero in weird cases
-            }
-        //Four potential positions for a three view layout. 1,2,3,4. QUaternary always returns Primary JIC of rotation.
-        case 3:
-            switch gridStyle {
-            case .Primary:
-                switch position {
-                case .Primary:
-                    newFrame = leftFrame
-                case .Secondary:
-                    newFrame = secondaryFrame
-                case .Tertiary:
-                    newFrame = tertiaryFrame
-                case .Quaternary:
-                    newFrame = leftFrame
-                default:
-                    newFrame = CGRect.zero //Always return zero in weird cases
-                }
-            case .Secondary:
-                switch position {
-                case .Primary:
-                    newFrame = rightFrame
-                case .Secondary:
-                    newFrame = quaternaryFrame
-                case .Tertiary:
-                    newFrame = primaryFrame
-                case .Quaternary:
-                    newFrame = rightFrame
-                default:
-                    newFrame = CGRect.zero //Always return zero in weird cases
-                }
-            case .Tertiary:
-                switch position {
-                case .Primary:
-                    newFrame = topFrame
-                case .Secondary:
-                    newFrame = tertiaryFrame
-                case .Tertiary:
-                    newFrame = quaternaryFrame
-                case .Quaternary:
-                    newFrame = topFrame
-                default:
-                    newFrame = CGRect.zero //Always return zero in weird cases
-                }
-            case .Quaternary:
-                switch position {
-                case .Primary:
-                    newFrame = bottomFrame
-                case .Secondary:
-                    newFrame = primaryFrame
-                case .Tertiary:
-                    newFrame = secondaryFrame
-                case .Quaternary:
-                    newFrame = bottomFrame
-                default:
-                    newFrame = CGRect.zero //Always return zero in weird cases
-                }
-            default:
-                newFrame = CGRect.zero //Always return zero in weird cases
-            }
-        //Two potention configs, horizonal(1,3) or vertical(2,4)
-        case 2:
-            switch gridStyle {
-            case .Primary, .Tertiary:
-                newFrame = (position == .Primary) || (position == .Quaternary) ? topFrame : bottomFrame
-            case .Secondary, .Quaternary:
-                newFrame = (position == .Primary) || (position == .Quaternary) ? leftFrame : rightFrame
-            default:
-                newFrame = CGRect.zero //Always return zero in weird cases
-            }
-        //Better single view options needed in future.
-        default:
-            switch position {
-            case .Primary:
-                newFrame = primaryFrame
-            case .Secondary:
-                newFrame = secondaryFrame
-            case .Tertiary:
-                newFrame = tertiaryFrame
-            case .Quaternary:
-                newFrame = primaryFrame
-            default:
-                newFrame = CGRect.zero //Always return zero in weird cases
-            }
-            
-        }
-        
-        return newFrame
-    }
-    
     //MARK:Adding/Removing/Moving Views
     func setViewControllers(newViewControllers:[UIViewController?]) {
         controllers[.Primary] = newViewControllers.count > 0 ? newViewControllers[SlideViewPositions.Primary.rawValue] : nil
@@ -431,6 +304,133 @@ class SlideViewController: UIViewController {
             }
             
         }
+    }
+    
+    //MARK:Draw code
+    override func viewWillLayoutSubviews() {
+        updateViewLayouts()
+    }
+    override func viewDidLayoutSubviews() {
+        moveSliderTo(newLocation: preciseSliderPosition)
+        sliderView.updateCrosshairLayers()
+    }
+    
+    //Call this after you've made a change to the views or the super.(Called automatically with viewWillLayoutSubviews)
+    func updateViewLayouts() {
+        for (_,viewController) in controllers.enumerated() {
+            if viewController.value != nil {
+                viewController.value!.view.frame = frameForPosition(position: viewController.key)
+            }
+        }
+        
+    }
+    //MARK:View Positions
+    //Return a view frame based on location, primary frame location and number of views
+    func frameForPosition(position:SlideViewPositions) -> CGRect {
+        var newFrame = self.view.bounds
+        let numberOfViews = controllerCount()
+        
+        //Four views, easy
+        switch numberOfViews {
+        case 4:
+            switch position {
+            case .Primary:
+                newFrame = primaryFrame
+            case .Secondary:
+                newFrame = secondaryFrame
+            case .Tertiary:
+                newFrame = tertiaryFrame
+            case .Quaternary:
+                newFrame = quaternaryFrame
+            default:
+                newFrame = CGRect.zero //Always return zero in weird cases
+            }
+        //Four potential positions for a three view layout. 1,2,3,4. QUaternary always returns Primary JIC of rotation.
+        case 3:
+            switch gridStyle {
+            case .Primary:
+                switch position {
+                case .Primary:
+                    newFrame = leftFrame
+                case .Secondary:
+                    newFrame = secondaryFrame
+                case .Tertiary:
+                    newFrame = tertiaryFrame
+                case .Quaternary:
+                    newFrame = leftFrame
+                default:
+                    newFrame = CGRect.zero //Always return zero in weird cases
+                }
+            case .Secondary:
+                switch position {
+                case .Primary:
+                    newFrame = rightFrame
+                case .Secondary:
+                    newFrame = quaternaryFrame
+                case .Tertiary:
+                    newFrame = primaryFrame
+                case .Quaternary:
+                    newFrame = rightFrame
+                default:
+                    newFrame = CGRect.zero //Always return zero in weird cases
+                }
+            case .Tertiary:
+                switch position {
+                case .Primary:
+                    newFrame = topFrame
+                case .Secondary:
+                    newFrame = tertiaryFrame
+                case .Tertiary:
+                    newFrame = quaternaryFrame
+                case .Quaternary:
+                    newFrame = topFrame
+                default:
+                    newFrame = CGRect.zero //Always return zero in weird cases
+                }
+            case .Quaternary:
+                switch position {
+                case .Primary:
+                    newFrame = bottomFrame
+                case .Secondary:
+                    newFrame = primaryFrame
+                case .Tertiary:
+                    newFrame = secondaryFrame
+                case .Quaternary:
+                    newFrame = bottomFrame
+                default:
+                    newFrame = CGRect.zero //Always return zero in weird cases
+                }
+            default:
+                newFrame = CGRect.zero //Always return zero in weird cases
+            }
+        //Two potention configs, horizonal(1,3) or vertical(2,4)
+        case 2:
+            switch gridStyle {
+            case .Primary, .Tertiary:
+                newFrame = (position == .Primary) || (position == .Quaternary) ? topFrame : bottomFrame
+            case .Secondary, .Quaternary:
+                newFrame = (position == .Primary) || (position == .Quaternary) ? leftFrame : rightFrame
+            default:
+                newFrame = CGRect.zero //Always return zero in weird cases
+            }
+        //Better single view options needed in future.
+        default:
+            switch position {
+            case .Primary:
+                newFrame = primaryFrame
+            case .Secondary:
+                newFrame = secondaryFrame
+            case .Tertiary:
+                newFrame = tertiaryFrame
+            case .Quaternary:
+                newFrame = primaryFrame
+            default:
+                newFrame = CGRect.zero //Always return zero in weird cases
+            }
+            
+        }
+        
+        return newFrame
     }
     
     //MARK: Utilities

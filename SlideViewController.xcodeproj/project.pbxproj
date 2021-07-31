@@ -36,6 +36,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		D73333C826B6106C00C55711 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		D75B888526AF22E300DC2636 /* SlideViewController.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SlideViewController.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D75B888826AF22E300DC2636 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D75B888A26AF22E300DC2636 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -106,6 +107,7 @@
 				D75B888826AF22E300DC2636 /* AppDelegate.swift */,
 				D75B888A26AF22E300DC2636 /* SceneDelegate.swift */,
 				D75B888C26AF22E300DC2636 /* SlideViewController.swift */,
+				D73333C826B6106C00C55711 /* README.md */,
 				D7C6ABE126AF76910097F7CE /* crosshairView.swift */,
 				D75B888E26AF22E300DC2636 /* Main.storyboard */,
 				D75B889126AF22E700DC2636 /* Assets.xcassets */,
