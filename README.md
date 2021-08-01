@@ -3,7 +3,7 @@
 ![A SlideViewController](https://dohernandez.net/wp-content/uploads/sites/2/2021/08/IMG_0421.jpeg)
 ![A SlideViewController](https://dohernandez.net/wp-content/uploads/sites/2/2021/08/IMG_0416.jpeg)
 
-Need to display multiple UIVIewControllers in a small space? Do their frames need to be user adjustable? That's what SlideViewController is for.
+Do you need to display multiple UIVIewControllers in a small space? Do their frames need to be user adjustable? That's what SlideViewController is for.
 Automatically displays up to four views depending on how many views it is sent. Can be configured with a horizontal or vertical orientation and to rotate clockwise or counter-clockwise.
 
 Slider Gestures:
