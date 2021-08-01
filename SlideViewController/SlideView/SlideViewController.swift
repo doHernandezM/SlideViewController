@@ -7,9 +7,17 @@
 
 import UIKit
 
+public enum SlideViewPositions:Int {
+    case Primary = 0, Secondary, Tertiary, Quaternary, Buffer
+    
+    static func ordered() -> [SlideViewPositions]{
+        return[SlideViewPositions.Primary,SlideViewPositions.Secondary,SlideViewPositions.Tertiary,SlideViewPositions.Quaternary]
+    }
+}
+
 class SlideViewController: UIViewController {
     //This is wehere are the view live. It's best that they are sorted with any nill at the end of the dict(ie 1,2,nil,nil)
-    private var controllers: [SlideViewPositions:UIViewController?] = [:]
+    var controllers: [SlideViewPositions:UIViewController?] = [:]
     
     //MARK: Inits
     //They are all the same. We are creating generic view controllers for demo. Otherwise insert your own view controllers here with setViewControllers
@@ -18,7 +26,7 @@ class SlideViewController: UIViewController {
     }
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        setViewControllers(newViewControllers: createDevControllers(number: 4))//DEV:::DELETE for release
+        setViewControllers(newViewControllers: createDevControllers(slideViewController: self, number: 2))//DEV:::DELETE for release
     }
     init(newViewControllers: [UIViewController?]) {//Use this to init with custom view controllers
         super.init(nibName: nil, bundle: nil)
@@ -26,13 +34,6 @@ class SlideViewController: UIViewController {
     }
     
     //Use this enum to define the SlideViews gridStyle as well as view position.
-    public enum SlideViewPositions:Int {
-        case Primary = 0, Secondary, Tertiary, Quaternary, Buffer
-        
-        static func ordered() -> [SlideViewPositions]{
-            return[SlideViewPositions.Primary,SlideViewPositions.Secondary,SlideViewPositions.Tertiary,SlideViewPositions.Quaternary]
-        }
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -46,33 +47,10 @@ class SlideViewController: UIViewController {
         updateViewLayouts()
     }
     
-    //MARK:DEV
-    //FIXME:Remove, dev only
-    //This creates generic view controllers to test with.
-    func createDevControllers(number:Int) -> [UIViewController] {
-        var viewControllers:[UIViewController] = []// = [nil,nil,nil,nil]
-        
-        for i in 0..<(number - 1) {
-            viewControllers.append(UIViewController())
-            viewControllers[i].view.backgroundColor = UIColor.randomColor()
-            if number == 1 {return viewControllers}
-        }
-        //SlideCeption
-        var subsSlideViewControllers: [UIViewController] = []
-
-        for i in 0..<3 {
-            subsSlideViewControllers.append(UIViewController())
-            subsSlideViewControllers[i].view.backgroundColor = UIColor.randomColor()
-        }
-
-        viewControllers.append(SlideViewController(newViewControllers: subsSlideViewControllers))
-        return viewControllers
-    }
-    
     //MARK:Funtionality options
     //Many of these options as well as the options for the slider will be broken out to a struc that can be passed at any time.
     public var gridStyle:SlideViewPositions = .Primary
-    public var rotateViewClockwise = false
+    public var rotateViewClockwise = true
     private var stopEditAfterRotate = false//If a rotation event if fleeting, get out of it after one rotation.
     public var editModeActive = false//Edit mode can be set here, must update views after this is set.
     private var xyLock: (x:Bool,y:Bool) = (false,false)//Make it so the slider will only move in one direction.
@@ -144,18 +122,23 @@ class SlideViewController: UIViewController {
     }
     
     //MARK:Adding/Removing/Moving Views
-    func setViewControllers(newViewControllers:[UIViewController?]) {
+    func addViewControllers(newViewControllers: [UIViewController?]) {
+        self.setViewControllers(newViewControllers: newViewControllers)
+        self.addControllersToView(newControllers: self.controllers)
+    }
+    
+    fileprivate func setViewControllers(newViewControllers:[UIViewController?]) {
         controllers[.Primary] = newViewControllers.count > 0 ? newViewControllers[SlideViewPositions.Primary.rawValue] : nil
         controllers[.Secondary] = newViewControllers.count > 1 ? newViewControllers[SlideViewPositions.Secondary.rawValue] : nil
         controllers[.Tertiary] = newViewControllers.count > 2 ? newViewControllers[SlideViewPositions.Tertiary.rawValue] : nil
         controllers[.Quaternary] = newViewControllers.count > 3 ? newViewControllers[SlideViewPositions.Quaternary.rawValue] : nil
-        
     }
     
     //This is what actually adds views to the slideView.
-    //FIXME: You must remove old views first or they may still be children of the slideView.
-    func addControllersToView(newControllers: [SlideViewPositions:UIViewController?]?) {
-        if newControllers != nil {controllers = newControllers!}//Simple replace. In the Future this should be a merge.
+    //FIXME: Simple remove and replace. In the Future this should be a merge.
+    fileprivate func addControllersToView(newControllers: [SlideViewPositions:UIViewController?]?) {
+//        removeAllViews()
+        if newControllers != nil {controllers = newControllers!}
         for (_,viewController) in controllers.enumerated() {
             if viewController.value != nil {
                 self.addChild(viewController.value!)
@@ -166,16 +149,17 @@ class SlideViewController: UIViewController {
         }
     }
     
-    func removeControllerFromView(oldControllers:[UIViewController]) {
-        for (_,oldController) in oldControllers.enumerated() {
-            for (_,viewController) in controllers.enumerated() {
-                if viewController.value == oldController {
+    //
+    func removeAllViews() {
+        for (_,controllerObject) in controllers.enumerated() {
+            if controllerObject.value != nil {
+                    let oldController = controllerObject.value!
                     oldController.willMove(toParent: nil)
                     oldController.view.removeFromSuperview()
                     oldController.removeFromParent()
                 }
             }
-        }
+        controllers.removeAll()
     }
     
     //Long press let's up control which view is where.
@@ -197,7 +181,7 @@ class SlideViewController: UIViewController {
             viewController?.view.layer.cornerRadius = subviewCornerRadius
         }
         
-        UIView.animate(withDuration: 0.025) { [self] in
+        UIView.animate(withDuration: 0.05) { [self] in
             updateViewLayouts()
         }
     }
@@ -229,6 +213,7 @@ class SlideViewController: UIViewController {
         var controllersBuffer: [SlideViewPositions:UIViewController?] = controllers//We need a place to shuffle our views and nils into
         var nextNilView = controllers.count //count down from the end of the dict
         var nextView = 0 //count up from the beginning of the dict
+        if controllers.count > 1 {
         for (_,position) in (positionKeys.enumerated()) {
             if controllers[position]! == nil {
                 nextNilView -= 1
@@ -239,16 +224,16 @@ class SlideViewController: UIViewController {
             }
         }
         controllers = controllersBuffer
-        
+        }
         //Once all the dict items are swapped, tell the views to redraw themselves
-        UIView.animate(withDuration: 0.1) { [self] in
+        UIView.animate(withDuration: 0.25) { [self] in
             updateViewLayouts()
         }
     }
     
     //Get an array of position keys, add a buffer key and swap position keys. Then update all of the frames.
-    fileprivate func swapControllerPositions(_ positionKeys: inout [SlideViewController.SlideViewPositions]) {
-        positionKeys.insert(.Buffer, at: 0)
+    fileprivate func swapControllerPositions(_ positionKeys: inout [SlideViewPositions]) {
+        positionKeys.insert(SlideViewPositions.Buffer, at: 0)
         //Swap keys on each dictionary item
         controllers[positionKeys[0]] = controllers[positionKeys[1]]
         controllers[positionKeys[1]] = controllers[positionKeys[2]]
@@ -259,7 +244,7 @@ class SlideViewController: UIViewController {
         positionKeys.removeFirst()
     }
     
-    //Call this to change the views congifuration(horizontal=Primary/vertical/top/bottom)
+    //Call this to change the views configuration(horizontal=Primary/vertical/top/bottom)
     func changeGridStyle(style:SlideViewPositions?) {
         if style != nil {
             gridStyle = style!
@@ -271,7 +256,7 @@ class SlideViewController: UIViewController {
             }
         }
         //Once all the dict items are swapped, tell the views to redraw themselves
-        UIView.animate(withDuration: 0.1) { [self] in
+        UIView.animate(withDuration: 0.25) { [self] in
             updateViewLayouts()
         }
     }
@@ -407,10 +392,14 @@ class SlideViewController: UIViewController {
         //Two potention configs, horizonal(1,3) or vertical(2,4)
         case 2:
             switch gridStyle {
-            case .Primary, .Tertiary:
+            case .Primary:
                 newFrame = (position == .Primary) || (position == .Quaternary) ? topFrame : bottomFrame
-            case .Secondary, .Quaternary:
+            case .Secondary:
                 newFrame = (position == .Primary) || (position == .Quaternary) ? leftFrame : rightFrame
+            case .Tertiary:
+                newFrame = (position == .Primary) || (position == .Quaternary) ? bottomFrame : topFrame
+            case .Quaternary:
+                newFrame = (position == .Primary) || (position == .Quaternary) ? rightFrame : leftFrame
             default:
                 newFrame = CGRect.zero //Always return zero in weird cases
             }
@@ -438,10 +427,22 @@ class SlideViewController: UIViewController {
     func controllerCount() -> Int {
         var count = 0
         
+        if (controllers[.Primary] == nil) {count += 0
+        } else {
         count = count + ((controllers[.Primary]! != nil) ? 1 : 0)
+        }
+        if (controllers[.Secondary] == nil) {count += 0
+        } else {
         count = count + ((controllers[.Secondary]! != nil) ? 1 : 0)
+        }
+        if (controllers[.Tertiary] == nil) {count += 0
+        } else {
         count = count + ((controllers[.Tertiary]! != nil) ? 1 : 0)
+        }
+        if (controllers[.Quaternary] == nil) {count += 0
+        } else {
         count = count + ((controllers[.Quaternary]! != nil) ? 1 : 0)
+        }
         
         return count
     }

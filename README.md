@@ -16,7 +16,7 @@ As easy as creating the view then giving it some viewControllers
 
 For example:
 ```swift
-let subViewControllers = [zxyMapController, xyzfavesTableController, zxySettingController]
+let subViewControllers = [zxyMapController, xyzFavesTableController, zxySettingController]
 let slideController = SlideViewController(newViewControllers: subViewControllers) //Sets view position based in order (ie 0 = Primary, 1 = Secondary, etc.)
 ```
 Funtionality options
@@ -43,4 +43,5 @@ private var xyLock: (x:Bool,y:Bool) = (false,false)
 
 To Fix:
 * Add accessibility
-* While devs should make sure they are inside safe area, add a more fool proof way to ensure this.
+* Single view mode is currently stuck in the upper left hand corner
+* While devs should make sure they are inside safe area, add a more fool-proof way to ensure this.

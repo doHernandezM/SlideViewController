@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D70216A726B73143006540C2 /* SlideViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D70216A626B73143006540C2 /* SlideViewControllerDelegate.swift */; };
+		D73333CB26B6606500C55711 /* DemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D73333C926B6606500C55711 /* DemoViewController.swift */; };
+		D73333CC26B6606500C55711 /* DemoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D73333CA26B6606500C55711 /* DemoViewController.xib */; };
 		D75B888926AF22E300DC2636 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D75B888826AF22E300DC2636 /* AppDelegate.swift */; };
 		D75B888B26AF22E300DC2636 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D75B888A26AF22E300DC2636 /* SceneDelegate.swift */; };
 		D75B888D26AF22E300DC2636 /* SlideViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D75B888C26AF22E300DC2636 /* SlideViewController.swift */; };
@@ -36,7 +39,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		D70216A626B73143006540C2 /* SlideViewControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlideViewControllerDelegate.swift; sourceTree = "<group>"; };
 		D73333C826B6106C00C55711 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		D73333C926B6606500C55711 /* DemoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoViewController.swift; sourceTree = "<group>"; };
+		D73333CA26B6606500C55711 /* DemoViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DemoViewController.xib; sourceTree = "<group>"; };
 		D75B888526AF22E300DC2636 /* SlideViewController.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SlideViewController.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D75B888826AF22E300DC2636 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D75B888A26AF22E300DC2636 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -80,6 +86,25 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		D73333CD26B6607000C55711 /* DemoView */ = {
+			isa = PBXGroup;
+			children = (
+				D73333C926B6606500C55711 /* DemoViewController.swift */,
+				D73333CA26B6606500C55711 /* DemoViewController.xib */,
+			);
+			path = DemoView;
+			sourceTree = "<group>";
+		};
+		D73333CE26B6608700C55711 /* SlideView */ = {
+			isa = PBXGroup;
+			children = (
+				D75B888C26AF22E300DC2636 /* SlideViewController.swift */,
+				D70216A626B73143006540C2 /* SlideViewControllerDelegate.swift */,
+				D7C6ABE126AF76910097F7CE /* SliderView.swift */,
+			);
+			path = SlideView;
+			sourceTree = "<group>";
+		};
 		D75B887C26AF22E200DC2636 = {
 			isa = PBXGroup;
 			children = (
@@ -107,8 +132,8 @@
 				D75B88B826AF22F400DC2636 /* SlideViewController.entitlements */,
 				D75B888826AF22E300DC2636 /* AppDelegate.swift */,
 				D75B888A26AF22E300DC2636 /* SceneDelegate.swift */,
-				D75B888C26AF22E300DC2636 /* SlideViewController.swift */,
-				D7C6ABE126AF76910097F7CE /* SliderView.swift */,
+				D73333CD26B6607000C55711 /* DemoView */,
+				D73333CE26B6608700C55711 /* SlideView */,
 				D75B888E26AF22E300DC2636 /* Main.storyboard */,
 				D75B889126AF22E700DC2636 /* Assets.xcassets */,
 				D75B889326AF22E700DC2636 /* LaunchScreen.storyboard */,
@@ -241,6 +266,7 @@
 				D75B889526AF22E700DC2636 /* LaunchScreen.storyboard in Resources */,
 				D75B889226AF22E700DC2636 /* Assets.xcassets in Resources */,
 				D75B889026AF22E300DC2636 /* Main.storyboard in Resources */,
+				D73333CC26B6606500C55711 /* DemoViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -266,9 +292,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				D75B888D26AF22E300DC2636 /* SlideViewController.swift in Sources */,
+				D70216A726B73143006540C2 /* SlideViewControllerDelegate.swift in Sources */,
 				D7C6ABE226AF76910097F7CE /* SliderView.swift in Sources */,
 				D75B888926AF22E300DC2636 /* AppDelegate.swift in Sources */,
 				D75B888B26AF22E300DC2636 /* SceneDelegate.swift in Sources */,
+				D73333CB26B6606500C55711 /* DemoViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -447,6 +475,7 @@
 				CODE_SIGN_ENTITLEMENTS = SlideViewController/SlideViewController.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = JS5V3TTJRN;
 				INFOPLIST_FILE = SlideViewController/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
@@ -471,6 +500,7 @@
 				CODE_SIGN_ENTITLEMENTS = SlideViewController/SlideViewController.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = JS5V3TTJRN;
 				INFOPLIST_FILE = SlideViewController/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;

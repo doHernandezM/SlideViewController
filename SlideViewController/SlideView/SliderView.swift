@@ -7,9 +7,18 @@
 
 import UIKit
 
+fileprivate var crosshairColor: UIColor = UIColor.systemGray
+fileprivate var crosshairActiveColor: UIColor = UIColor.systemBlue
+
 class SliderView: UIView {
     fileprivate var editStateActive = false
     
+    func configure(slideView:SlideViewController) {
+        slideView.view.addSubview(self)
+        update()
+    }
+    func update() {
+    }
     //Toggles edit mode on and off. Send nil to return state without changing state.
     //Override this to receive updates to state. Make sure to call let editModeIsOn = super.editState(active: active)
     func editState(active: Bool? = nil) -> Bool? {
@@ -29,10 +38,8 @@ class dotView: SliderView {
     private let circleRadius: CGFloat = 75
     var thickness = CGFloat(3.0)
     
-    private var crosshairColor: UIColor = UIColor.separator
-    private var crosshairActiveColor: UIColor = UIColor.systemBlue
     
-    func configure(slideView:SlideViewController) {
+    override func configure(slideView:SlideViewController) {
         //Visuals
         self.backgroundColor = .systemBackground
         circleLayer.fillColor = self.backgroundColor?.cgColor
@@ -56,7 +63,7 @@ class dotView: SliderView {
         return editModeIsOn
     }
     
-    func update() {
+    override func update() {
         
         if editStateActive {
             circleLayer.fillColor = crosshairActiveColor.cgColor
@@ -78,11 +85,9 @@ class CrosshairView: SliderView {
     private let circleRadius: CGFloat = 75
     var thickness = CGFloat(3.0)
     
-    private var crosshairColor: UIColor = UIColor.separator
-    private var crosshairActiveColor: UIColor = UIColor.systemBlue
     
     //MARK:Configuration
-    func configure(slideView:SlideViewController) {
+    override func configure(slideView:SlideViewController) {
         //Visuals
         self.backgroundColor = .systemBackground
         circleLayer.fillColor = self.backgroundColor?.cgColor
@@ -110,7 +115,7 @@ class CrosshairView: SliderView {
         return editModeIsOn
     }
     
-    func update() {
+    override func update() {
         
         if editStateActive {
             verticalLayer.backgroundColor = crosshairActiveColor.cgColor
