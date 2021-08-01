@@ -93,7 +93,7 @@ class CrosshairView: SliderView {
         circleLayer.fillColor = self.backgroundColor?.cgColor
                 
         //Frame
-        self.frame = CGRect(x: 0.0, y: 0.0, width: slideView.view.bounds.width * 0.4, height: slideView.view.bounds.height * 0.4)
+        self.frame = CGRect(x: 0.0, y: 0.0, width: slideView.safeView.bounds.width * 0.4, height: slideView.view.bounds.height * 0.4)
         
         circleLayer.path = UIBezierPath(roundedRect: CGRect(x: 0, y: 0, width: 2.0 * circleRadius, height: 2.0 * circleRadius), cornerRadius: circleRadius).cgPath
         circleLayer.position = CGPoint(x: self.frame.midX - circleRadius, y: self.frame.midY - circleRadius)
@@ -105,7 +105,7 @@ class CrosshairView: SliderView {
         update()
         
         //Add to parent view
-        slideView.view.addSubview(self)
+        slideView.safeView.addSubview(self)
         
     }
     

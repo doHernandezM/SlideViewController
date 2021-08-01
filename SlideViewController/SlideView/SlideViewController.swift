@@ -17,6 +17,7 @@ public enum SlideViewPositions:Int {
 
 class SlideViewController: UIViewController {
     //This is wehere are the view live. It's best that they are sorted with any nill at the end of the dict(ie 1,2,nil,nil)
+    var safeView: UIView = UIView(frame: CGRect.zero)
     var controllers: [SlideViewPositions:UIViewController?] = [:]
     
     //MARK: Inits
@@ -39,14 +40,15 @@ class SlideViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
         self.view.clipsToBounds = true
-        
+        self.safeView.frame = self.view.frame
+        self.view.addSubview(safeView)
         configureSlider()
         
         addControllersToView(newControllers: nil)
         
         updateViewLayouts()
     }
-    
+   
     //MARK:Funtionality options
     //Many of these options as well as the options for the slider will be broken out to a struc that can be passed at any time.
     public var gridStyle:SlideViewPositions = .Primary
@@ -61,7 +63,7 @@ class SlideViewController: UIViewController {
     private var slideViewBorderThickness = CGFloat(9)//Unless you have another mechanism for moving the slider, anything less than 9 is hard to tap.\
     private var sliderPostitionPrecise = CGPoint() {//Use preciseSliderPosition or sliderPostitionRelative for better experience.
         willSet(newPoint) {
-            sliderPostitionRelative = CGPoint(x: newPoint.x / self.view.bounds.width, y: newPoint.y / self.view.bounds.height)
+            sliderPostitionRelative = CGPoint(x: newPoint.x / self.safeView.bounds.width, y: newPoint.y / self.safeView.bounds.height)
         }
     }
     public var sliderPostitionRelative = CGPoint()
@@ -77,11 +79,11 @@ class SlideViewController: UIViewController {
         sliderView.addGestureRecognizer(longPressGesture)
         //Long press will activate edit mode
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.tap(_:)))
-        self.view.addGestureRecognizer(tapGesture)
+        self.safeView.addGestureRecognizer(tapGesture)
         
         sliderView.configure(slideView:self)
-        sliderView.center = self.view.center
-        sliderPostitionPrecise = self.view.center
+        sliderView.center = self.safeView.center
+        sliderPostitionPrecise = self.safeView.center
     }
     
     func moveSliderTo(newLocation:CGPoint) {
@@ -123,9 +125,10 @@ class SlideViewController: UIViewController {
     
     //MARK:Adding/Removing/Moving Views
     func addViewControllers(newViewControllers: [UIViewController?]) {
+        print("adddddd")
         self.setViewControllers(newViewControllers: newViewControllers)
         self.addControllersToView(newControllers: self.controllers)
-    }
+        }
     
     fileprivate func setViewControllers(newViewControllers:[UIViewController?]) {
         controllers[.Primary] = newViewControllers.count > 0 ? newViewControllers[SlideViewPositions.Primary.rawValue] : nil
@@ -141,12 +144,17 @@ class SlideViewController: UIViewController {
         if newControllers != nil {controllers = newControllers!}
         for (_,viewController) in controllers.enumerated() {
             if viewController.value != nil {
+                print("addChild1")
                 self.addChild(viewController.value!)
+                print("addChild2")
                 viewController.value!.view.frame = frameForPosition(position: viewController.key)
-                view.addSubview(viewController.value!.view)
+                print("addChild3")
+                safeView.addSubview(viewController.value!.view)
+                print("addChild4")
                 viewController.value!.didMove(toParent: self)
             }
         }
+        
     }
     
     //
@@ -265,7 +273,7 @@ class SlideViewController: UIViewController {
     //PAN will move the slider around.
     @objc func pan(_ gesture: UIPanGestureRecognizer? = nil)  {
         if gesture != nil {
-            moveSliderTo(newLocation:gesture!.location(in: self.view))
+            moveSliderTo(newLocation:gesture!.location(in: self.safeView))
         }
         
     }
@@ -294,6 +302,9 @@ class SlideViewController: UIViewController {
     
     //MARK:Draw code
     override func viewWillLayoutSubviews() {
+        let guide = view.safeAreaLayoutGuide
+        self.safeView.frame = guide.layoutFrame
+//        
         updateViewLayouts()
     }
     override func viewDidLayoutSubviews() {
@@ -313,8 +324,15 @@ class SlideViewController: UIViewController {
     //MARK:View Positions
     //Return a view frame based on location, primary frame location and number of views
     func frameForPosition(position:SlideViewPositions) -> CGRect {
-        var newFrame = self.view.bounds
+//        print("pos1")
+//        let guide = view.safeAreaLayoutGuide
+//        print("pos2")
+//                self.safeView.frame = guide.layoutFrame
+//        print("pos3")
+                 var newFrame = self.safeView.bounds
+//        print("pos4")
         let numberOfViews = controllerCount()
+//        print("pos5")
         
         //Four views, easy
         switch numberOfViews {
@@ -419,6 +437,7 @@ class SlideViewController: UIViewController {
             }
             
         }
+        print("pos6\(newFrame)")
         
         return newFrame
     }
@@ -449,32 +468,32 @@ class SlideViewController: UIViewController {
     
     //Frame calc utilities
     var left:CGFloat {
-        return self.view.bounds.origin.x
+        return self.safeView.bounds.origin.x
     }
     var right:CGFloat {
-        return self.view.bounds.size.width
+        return self.safeView.bounds.size.width
     }
     var top:CGFloat {
-        return self.view.bounds.origin.y
+        return self.safeView.bounds.origin.y
     }
     var bottom:CGFloat {
-        return self.view.bounds.size.height
+        return self.safeView.bounds.size.height
     }
     var halfSlideViewBorderThickness: CGFloat {
         return (slideViewBorderThickness * 0.5)
     }
     
     var topFrame:CGRect {
-        return CGRect(x: left, y: top, width: self.view.bounds.size.width, height: preciseSliderPosition.y - halfSlideViewBorderThickness)
+        return CGRect(x: left, y: top, width: self.safeView.bounds.size.width, height: preciseSliderPosition.y - halfSlideViewBorderThickness)
     }
     var bottomFrame:CGRect {
-        return CGRect(x: left, y: middleY, width: self.view.bounds.size.width, height: self.view.bounds.size.height - (primarySize.height + slideViewBorderThickness))
+        return CGRect(x: left, y: middleY, width: self.safeView.bounds.size.width, height: self.safeView.bounds.size.height - (primarySize.height + slideViewBorderThickness))
     }
     var leftFrame:CGRect {
-        return CGRect(x: left, y: top, width: preciseSliderPosition.x - halfSlideViewBorderThickness, height: self.view.bounds.size.height)
+        return CGRect(x: left, y: top, width: preciseSliderPosition.x - halfSlideViewBorderThickness, height: self.safeView.bounds.size.height)
     }
     var rightFrame:CGRect {
-        return CGRect(x: middleX, y: top, width: self.view.bounds.size.width - (primarySize.width + slideViewBorderThickness), height: self.view.bounds.size.height)
+        return CGRect(x: middleX, y: top, width: self.safeView.bounds.size.width - (primarySize.width + slideViewBorderThickness), height: self.safeView.bounds.size.height)
     }
     
     var primarySize:CGSize {
@@ -484,35 +503,35 @@ class SlideViewController: UIViewController {
         return CGRect(x: left, y: top, width: preciseSliderPosition.x - halfSlideViewBorderThickness, height: preciseSliderPosition.y - halfSlideViewBorderThickness)
     }
     var secondaryFrame:CGRect {
-        return CGRect(x: middleX, y: top, width: self.view.bounds.size.width - (primarySize.width + slideViewBorderThickness), height: preciseSliderPosition.y - halfSlideViewBorderThickness)
+        return CGRect(x: middleX, y: top, width: self.safeView.bounds.size.width - (primarySize.width + slideViewBorderThickness), height: preciseSliderPosition.y - halfSlideViewBorderThickness)
     }
     var tertiaryFrame:CGRect {
-        return CGRect(x: middleX, y: middleY, width:self.view.bounds.size.width - (primarySize.width + slideViewBorderThickness), height: self.view.bounds.size.height - (primarySize.height + slideViewBorderThickness))
+        return CGRect(x: middleX, y: middleY, width:self.safeView.bounds.size.width - (primarySize.width + slideViewBorderThickness), height: self.safeView.bounds.size.height - (primarySize.height + slideViewBorderThickness))
     }
     var quaternaryFrame:CGRect {
-        return CGRect(x: left, y: middleY, width: preciseSliderPosition.x - halfSlideViewBorderThickness, height: self.view.bounds.size.height - (primarySize.height + slideViewBorderThickness))
+        return CGRect(x: left, y: middleY, width: preciseSliderPosition.x - halfSlideViewBorderThickness, height: self.safeView.bounds.size.height - (primarySize.height + slideViewBorderThickness))
     }
     
     var middleX:CGFloat {
         return preciseSliderPosition.x + halfSlideViewBorderThickness
     }
     var middleY:CGFloat {
-        return (self.view.bounds.size.height * centerSliderY) + halfSlideViewBorderThickness
+        return (self.safeView.bounds.size.height * centerSliderY) + halfSlideViewBorderThickness
     }
     var centerSliderX:CGFloat {
-        return (preciseSliderPosition.x / self.view.bounds.size.width)
+        return (preciseSliderPosition.x / self.safeView.bounds.size.width)
     }
     var centerSliderY:CGFloat {
-        return (preciseSliderPosition.y / self.view.bounds.size.height)
+        return (preciseSliderPosition.y / self.safeView.bounds.size.height)
     }
     var viewSizeWidth:CGFloat {
-        return (self.view.bounds.size.width - slideViewBorderThickness) * 0.5
+        return (self.safeView.bounds.size.width - slideViewBorderThickness) * 0.5
     }
     var viewSizeHeight:CGFloat {
-        return (self.view.bounds.size.height - slideViewBorderThickness) * 0.5
+        return (self.safeView.bounds.size.height - slideViewBorderThickness) * 0.5
     }
     var preciseSliderPosition:CGPoint {
-        sliderPostitionPrecise = CGPoint(x: sliderPostitionRelative.x * self.view.bounds.width, y: sliderPostitionRelative.y * self.view.bounds.height)
+        sliderPostitionPrecise = CGPoint(x: sliderPostitionRelative.x * self.safeView.bounds.width, y: sliderPostitionRelative.y * self.safeView.bounds.height)
         return sliderPostitionPrecise
     }
     
