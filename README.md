@@ -39,3 +39,7 @@ public var editModeActive = false
 ```swift
 private var xyLock: (x:Bool,y:Bool) = (false,false)
 ```
+
+To Fix:
+* Add accessibility
+* While devs should make sure they are inside safe area, add a more fool proof way to ensure this.
