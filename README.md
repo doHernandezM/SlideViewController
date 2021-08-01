@@ -1,14 +1,23 @@
 #  SlideViewController
-   ==================
 
-SlideViewController.
+![A SlideViewController](https://dohernandez.net/wp-content/uploads/sites/2/2021/08/IMG_0421.jpeg)
+![A SlideViewController](https://dohernandez.net/wp-content/uploads/sites/2/2021/08/IMG_0416.jpeg)
+
+Need to display multiple UIVIewControllers in a small space? Do their frames need to be user adjustable? THat's what SlideViewController is for.
+Automatically displays up to four views depending on how many views it is sent. Can be configured with a horizontal or vertical orientation and to rotate clockwise or counter-clockwise.
+
+Slider Gestures:
+* PAN will move the slider around.
+* LONGPRESS will toggle edit mode on and off.
+* TAP during edit mode will rotate the views.
 
 As easy as creating the view then giving it some viewControllers
 
 For example:
-1. let subViewControllers = [zxyMapController, xyzfavesTableController, zxySettingController]
-2. let slideController = SlideViewController(newViewControllers: subViewControllers) //Sets view position based in order (ie 0 = Primary, 1 = Secondary, etc.)
-
+```swift
+let subViewControllers = [zxyMapController, xyzfavesTableController, zxySettingController]
+let slideController = SlideViewController(newViewControllers: subViewControllers) //Sets view position based in order (ie 0 = Primary, 1 = Secondary, etc.)
+```
 Funtionality options
 
 * Many of these options as well as the options for the slider will be broken out to a struct that can be passed at any time.
@@ -17,7 +26,7 @@ public var gridStyle:SlideViewPositions = .Primary
 public var rotateViewClockwise = false
 ```
 
-* If a rotation event if fleeting, get out of it after one rotation.
+* If a rotation event is fleeting, get out of it after one rotation.
 ```swift
 private var stopEditAfterRotate = false
 ```
