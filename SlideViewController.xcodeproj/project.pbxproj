@@ -15,7 +15,7 @@
 		D75B889526AF22E700DC2636 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D75B889326AF22E700DC2636 /* LaunchScreen.storyboard */; };
 		D75B88A026AF22E700DC2636 /* SlideViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D75B889F26AF22E700DC2636 /* SlideViewControllerTests.swift */; };
 		D75B88AB26AF22E700DC2636 /* SlideViewControllerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D75B88AA26AF22E700DC2636 /* SlideViewControllerUITests.swift */; };
-		D7C6ABE226AF76910097F7CE /* crosshairView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7C6ABE126AF76910097F7CE /* crosshairView.swift */; };
+		D7C6ABE226AF76910097F7CE /* SliderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7C6ABE126AF76910097F7CE /* SliderView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,7 +52,7 @@
 		D75B88AA26AF22E700DC2636 /* SlideViewControllerUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SlideViewControllerUITests.swift; sourceTree = "<group>"; };
 		D75B88AC26AF22E700DC2636 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D75B88B826AF22F400DC2636 /* SlideViewController.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = SlideViewController.entitlements; sourceTree = "<group>"; };
-		D7C6ABE126AF76910097F7CE /* crosshairView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = crosshairView.swift; sourceTree = "<group>"; };
+		D7C6ABE126AF76910097F7CE /* SliderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SliderView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -108,7 +108,7 @@
 				D75B888826AF22E300DC2636 /* AppDelegate.swift */,
 				D75B888A26AF22E300DC2636 /* SceneDelegate.swift */,
 				D75B888C26AF22E300DC2636 /* SlideViewController.swift */,
-				D7C6ABE126AF76910097F7CE /* crosshairView.swift */,
+				D7C6ABE126AF76910097F7CE /* SliderView.swift */,
 				D75B888E26AF22E300DC2636 /* Main.storyboard */,
 				D75B889126AF22E700DC2636 /* Assets.xcassets */,
 				D75B889326AF22E700DC2636 /* LaunchScreen.storyboard */,
@@ -266,7 +266,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D75B888D26AF22E300DC2636 /* SlideViewController.swift in Sources */,
-				D7C6ABE226AF76910097F7CE /* crosshairView.swift in Sources */,
+				D7C6ABE226AF76910097F7CE /* SliderView.swift in Sources */,
 				D75B888926AF22E300DC2636 /* AppDelegate.swift in Sources */,
 				D75B888B26AF22E300DC2636 /* SceneDelegate.swift in Sources */,
 			);
@@ -445,10 +445,12 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = SlideViewController/SlideViewController.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = JS5V3TTJRN;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = SlideViewController/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				"IPHONEOS_DEPLOYMENT_TARGET[sdk=macosx*]" = 13.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -467,10 +469,12 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = SlideViewController/SlideViewController.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = JS5V3TTJRN;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = SlideViewController/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				"IPHONEOS_DEPLOYMENT_TARGET[sdk=macosx*]" = 13.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

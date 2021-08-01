@@ -24,15 +24,62 @@ class SliderView: UIView {
     }
 }
 
-class crosshairView: SliderView {
+class dotView: SliderView {
+    private var circleLayer = CAShapeLayer()
+    private let circleRadius: CGFloat = 75
+    var thickness = CGFloat(3.0)
+    
+    private var crosshairColor: UIColor = UIColor.separator
+    private var crosshairActiveColor: UIColor = UIColor.systemBlue
+    
+    func configure(slideView:SlideViewController) {
+        //Visuals
+        self.backgroundColor = .systemBackground
+        circleLayer.fillColor = self.backgroundColor?.cgColor
+                
+        //Frame
+        self.frame = CGRect(x: 0.0, y: 0.0, width: slideView.view.bounds.width * 0.4, height: slideView.view.bounds.height * 0.4)
+        
+        circleLayer.path = UIBezierPath(roundedRect: CGRect(x: 0, y: 0, width: 2.0 * circleRadius, height: 2.0 * circleRadius), cornerRadius: circleRadius).cgPath
+        circleLayer.position = CGPoint(x: self.frame.midX - circleRadius, y: self.frame.midY - circleRadius)
+        
+        self.layer.addSublayer(circleLayer)
+        
+        
+        //Add to parent view
+        slideView.view.addSubview(self)
+    }
+    
+    override func editState(active: Bool? = nil) -> Bool? {
+        let editModeIsOn = super.editState(active: active)
+        update()
+        return editModeIsOn
+    }
+    
+    func update() {
+        
+        if editStateActive {
+            circleLayer.fillColor = crosshairActiveColor.cgColor
+            circleLayer.fillColor = crosshairActiveColor.cgColor
+            
+        } else {
+            circleLayer.fillColor = crosshairColor.cgColor
+            circleLayer.fillColor = crosshairColor.cgColor
+        }
+    }
+}
+
+
+class CrosshairView: SliderView {
     //Crosshair is CALayers
     private var verticalLayer = CALayer()
     private var horizontalLayer = CALayer()
     private var circleLayer = CAShapeLayer()
-    private let circleRadius: CGFloat = 30
+    private let circleRadius: CGFloat = 75
     var thickness = CGFloat(3.0)
-    var length = CGFloat(75.0)
-    private var crosshairColor: UIColor = UIColor.lightGray
+    
+    private var crosshairColor: UIColor = UIColor.separator
+    private var crosshairActiveColor: UIColor = UIColor.systemBlue
     
     //MARK:Configuration
     func configure(slideView:SlideViewController) {
@@ -43,15 +90,14 @@ class crosshairView: SliderView {
         //Frame
         self.frame = CGRect(x: 0.0, y: 0.0, width: slideView.view.bounds.width * 0.4, height: slideView.view.bounds.height * 0.4)
         
-        let radius: CGFloat = 50.0
-        circleLayer.path = UIBezierPath(roundedRect: CGRect(x: 0, y: 0, width: 2.0 * radius, height: 2.0 * radius), cornerRadius: radius).cgPath
-                
+        circleLayer.path = UIBezierPath(roundedRect: CGRect(x: 0, y: 0, width: 2.0 * circleRadius, height: 2.0 * circleRadius), cornerRadius: circleRadius).cgPath
+        circleLayer.position = CGPoint(x: self.frame.midX - circleRadius, y: self.frame.midY - circleRadius)
+        
         self.layer.addSublayer(verticalLayer)
         self.layer.addSublayer(horizontalLayer)
         self.layer.addSublayer(circleLayer)
-        circleLayer.position = CGPoint(x: self.frame.midX - circleRadius, y: self.frame.midY - circleRadius)
         
-        updateCrosshairLayers()
+        update()
         
         //Add to parent view
         slideView.view.addSubview(self)
@@ -60,23 +106,20 @@ class crosshairView: SliderView {
     
     override func editState(active: Bool? = nil) -> Bool? {
         let editModeIsOn = super.editState(active: active)
-        updateCrosshairLayers()
+        update()
         return editModeIsOn
     }
     
-    func updateCrosshairLayers() {
+    func update() {
         
         if editStateActive {
-            crosshairColor = UIColor.systemBlue
-            //            thickness = thickness
+            verticalLayer.backgroundColor = crosshairActiveColor.cgColor
+            horizontalLayer.backgroundColor = crosshairActiveColor.cgColor
             
         } else {
-            crosshairColor = UIColor.lightGray
-            thickness = CGFloat(3.0)
+            verticalLayer.backgroundColor = crosshairColor.cgColor
+            horizontalLayer.backgroundColor = crosshairColor.cgColor
         }
-        
-        verticalLayer.backgroundColor = crosshairColor.cgColor
-        horizontalLayer.backgroundColor = crosshairColor.cgColor
         
         verticalLayer.cornerRadius = thickness / 2.0
         horizontalLayer.cornerRadius = thickness / 2.0
@@ -91,7 +134,7 @@ class crosshairView: SliderView {
         verticalLayer.frame.origin.x = (self.bounds.size.width / 2) - (thickness / 2)
         horizontalLayer.frame.origin.x =  (self.bounds.size.width / 2) - (horizontalLayer.frame.size.width / 2)
         horizontalLayer.frame.origin.y = (self.bounds.size.height / 2) - (thickness / 2)
-    
-        }
+            
+    }
     
 }

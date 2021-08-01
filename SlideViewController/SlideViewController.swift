@@ -25,7 +25,8 @@ class SlideViewController: UIViewController {
         self.setViewControllers(newViewControllers: newViewControllers)
     }
     
-    public enum SlideViewPositions:Int {//Use this enum to define the SlideViews gridStyle as well as view position.
+    //Use this enum to define the SlideViews gridStyle as well as view position.
+    public enum SlideViewPositions:Int {
         case Primary = 0, Secondary, Tertiary, Quaternary, Buffer
         
         static func ordered() -> [SlideViewPositions]{
@@ -56,13 +57,14 @@ class SlideViewController: UIViewController {
             viewControllers[i].view.backgroundColor = UIColor.randomColor()
             if number == 1 {return viewControllers}
         }
+        //SlideCeption
         var subsSlideViewControllers: [UIViewController] = []
-        
-        for i in 0..<(number) {
+
+        for i in 0..<3 {
             subsSlideViewControllers.append(UIViewController())
             subsSlideViewControllers[i].view.backgroundColor = UIColor.randomColor()
         }
-        
+
         viewControllers.append(SlideViewController(newViewControllers: subsSlideViewControllers))
         return viewControllers
     }
@@ -77,7 +79,7 @@ class SlideViewController: UIViewController {
     
     
     //MARK:Slider
-    private var sliderView = crosshairView(frame: CGRect())
+    private var sliderView = CrosshairView(frame: CGRect())
     private var slideViewBorderThickness = CGFloat(9)//Unless you have another mechanism for moving the slider, anything less than 9 is hard to tap.\
     private var sliderPostitionPrecise = CGPoint() {//Use preciseSliderPosition or sliderPostitionRelative for better experience.
         willSet(newPoint) {
@@ -184,7 +186,7 @@ class SlideViewController: UIViewController {
         _ = sliderView.editState(active: editModeActive)
         
         if editModeActive {
-            slideViewBorderThickness = slideViewBorderThickness * 1.5
+            slideViewBorderThickness = slideViewBorderThickness * 3.5
             subviewCornerRadius = CGFloat(5)
         } else {
             slideViewBorderThickness = CGFloat(9)
@@ -257,11 +259,12 @@ class SlideViewController: UIViewController {
         positionKeys.removeFirst()
     }
     
+    //Call this to change the views congifuration(horizontal=Primary/vertical/top/bottom)
     func changeGridStyle(style:SlideViewPositions?) {
         if style != nil {
             gridStyle = style!
         } else {
-            if gridStyle.rawValue < SlideViewPositions.Quaternary.rawValue {
+            if gridStyle.rawValue < SlideViewPositions.Quaternary.rawValue {//Almost often gets primary frames size
                 gridStyle = SlideViewPositions(rawValue: gridStyle.rawValue + 1)!
             } else {
                 gridStyle = .Primary
@@ -292,8 +295,6 @@ class SlideViewController: UIViewController {
             default:
                 break
             }
-            
-            
         }
     }
     //TAP during edit mode will rotate the views.
@@ -312,7 +313,7 @@ class SlideViewController: UIViewController {
     }
     override func viewDidLayoutSubviews() {
         moveSliderTo(newLocation: preciseSliderPosition)
-        sliderView.updateCrosshairLayers()
+        sliderView.update()
     }
     
     //Call this after you've made a change to the views or the super.(Called automatically with viewWillLayoutSubviews)
