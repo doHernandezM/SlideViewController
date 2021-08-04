@@ -15,7 +15,6 @@ let demoView = DemoViewController()
 func createDevControllers(slideViewController:SlideViewController?,number:Int) -> [UIViewController] {
     var viewControllers:[UIViewController] = []// = [nil,nil,nil,nil]
     
-
     demoView.slideViewController = slideViewController
     demoView.view.backgroundColor = UIColor.randomColor()
     viewControllers.append(demoView)
@@ -32,7 +31,6 @@ func createDevControllers(slideViewController:SlideViewController?,number:Int) -
     
     if number == 2 {return viewControllers}
    
-    
     for i in 2..<(number) {
         viewControllers.append(UIViewController())
         viewControllers[i].view.backgroundColor = UIColor.randomColor()
@@ -45,15 +43,15 @@ func createDevControllers(slideViewController:SlideViewController?,number:Int) -
 class DemoViewController: UIViewController, SlideViewControllerDelegate {
     
     var slideViewController: SlideViewController? = nil
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
         if slideViewController == nil {return}
         clockwiseSwitch!.isOn = slideViewController!.rotateViewClockwise
         configurationStepper!.value = Double(slideViewController!.gridStyle.rawValue)
         viewCountStepper!.value = Double(slideViewController!.controllerCount())
-        print(viewCountStepper!.value)
     }
-
     
     @IBOutlet weak var viewCountStepper: UIStepper?
     @IBOutlet weak var configurationStepper: UIStepper?
@@ -66,18 +64,17 @@ class DemoViewController: UIViewController, SlideViewControllerDelegate {
             let numberOfViews = Int(viewCountStepper!.value)
             slideViewController!.removeAllViews()
             slideViewController!.addViewControllers(newViewControllers: createDevControllers(slideViewController: slideViewController, number: numberOfViews))
-            print("Views:\(viewCountStepper!.value) : \(slideViewController!.controllerCount())")
             return
         }
+        
         if sender as? UIStepper == configurationStepper {
             let style: SlideViewPositions? = SlideViewPositions(rawValue: Int((sender as! UIStepper).value))
             slideViewController!.changeGridStyle(style:style)
-            print("Config:\((sender as! UIStepper).value) : \(style!)")
             return
         }
+        
         if sender as? UISwitch == clockwiseSwitch {
             slideViewController?.rotateViewClockwise = clockwiseSwitch!.isOn
-            print("rotation")
             return
         }
     }

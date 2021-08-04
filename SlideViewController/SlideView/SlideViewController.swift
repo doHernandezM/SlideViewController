@@ -1,6 +1,6 @@
 //
 //  ViewController.swift
-//  SlideViewController
+//  SlideViewController v0.9
 //
 //  Created by Dennis Hernandez on 7/26/21.
 //
@@ -125,7 +125,6 @@ class SlideViewController: UIViewController {
     
     //MARK:Adding/Removing/Moving Views
     func addViewControllers(newViewControllers: [UIViewController?]) {
-        print("adddddd")
         self.setViewControllers(newViewControllers: newViewControllers)
         self.addControllersToView(newControllers: self.controllers)
         }
@@ -144,13 +143,9 @@ class SlideViewController: UIViewController {
         if newControllers != nil {controllers = newControllers!}
         for (_,viewController) in controllers.enumerated() {
             if viewController.value != nil {
-                print("addChild1")
                 self.addChild(viewController.value!)
-                print("addChild2")
                 viewController.value!.view.frame = frameForPosition(position: viewController.key)
-                print("addChild3")
                 safeView.addSubview(viewController.value!.view)
-                print("addChild4")
                 viewController.value!.didMove(toParent: self)
             }
         }
@@ -215,9 +210,11 @@ class SlideViewController: UIViewController {
         var positionKeys: [SlideViewPositions] = newOrder
         
         swapControllerPositions(&positionKeys)// Remove the buffer from the position keys
-        //FIXME:Counterclockwise doens't work well yet.
         //Find nonNil and nil views and puts them into the correct order.
         //Move nil views to the end of view controllers to make drawing code simpler.
+        //We don't need to do any of this if there is only 1 view.
+        if controllerCount() > 1 {
+        
         var controllersBuffer: [SlideViewPositions:UIViewController?] = controllers//We need a place to shuffle our views and nils into
         var nextNilView = controllers.count //count down from the end of the dict
         var nextView = 0 //count up from the beginning of the dict
@@ -232,6 +229,7 @@ class SlideViewController: UIViewController {
             }
         }
         controllers = controllersBuffer
+        }
         }
         //Once all the dict items are swapped, tell the views to redraw themselves
         UIView.animate(withDuration: 0.25) { [self] in
@@ -324,15 +322,8 @@ class SlideViewController: UIViewController {
     //MARK:View Positions
     //Return a view frame based on location, primary frame location and number of views
     func frameForPosition(position:SlideViewPositions) -> CGRect {
-//        print("pos1")
-//        let guide = view.safeAreaLayoutGuide
-//        print("pos2")
-//                self.safeView.frame = guide.layoutFrame
-//        print("pos3")
-                 var newFrame = self.safeView.bounds
-//        print("pos4")
+        var newFrame = self.safeView.bounds
         let numberOfViews = controllerCount()
-//        print("pos5")
         
         //Four views, easy
         switch numberOfViews {
@@ -431,13 +422,12 @@ class SlideViewController: UIViewController {
             case .Tertiary:
                 newFrame = tertiaryFrame
             case .Quaternary:
-                newFrame = primaryFrame
+                newFrame = quaternaryFrame
             default:
                 newFrame = CGRect.zero //Always return zero in weird cases
             }
             
         }
-        print("pos6\(newFrame)")
         
         return newFrame
     }
