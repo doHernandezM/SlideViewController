@@ -359,19 +359,6 @@ class SlideViewController: UIViewController {
             case .Secondary:
                 switch position {
                 case .Primary:
-                    newFrame = rightFrame
-                case .Secondary:
-                    newFrame = quaternaryFrame
-                case .Tertiary:
-                    newFrame = primaryFrame
-                case .Quaternary:
-                    newFrame = rightFrame
-                default:
-                    newFrame = CGRect.zero //Always return zero in weird cases
-                }
-            case .Tertiary:
-                switch position {
-                case .Primary:
                     newFrame = topFrame
                 case .Secondary:
                     newFrame = tertiaryFrame
@@ -379,6 +366,19 @@ class SlideViewController: UIViewController {
                     newFrame = quaternaryFrame
                 case .Quaternary:
                     newFrame = topFrame
+                default:
+                    newFrame = CGRect.zero //Always return zero in weird cases
+                }
+            case .Tertiary:
+                switch position {
+                case .Primary:
+                    newFrame = rightFrame
+                case .Secondary:
+                    newFrame = quaternaryFrame
+                case .Tertiary:
+                    newFrame = primaryFrame
+                case .Quaternary:
+                    newFrame = rightFrame
                 default:
                     newFrame = CGRect.zero //Always return zero in weird cases
                 }

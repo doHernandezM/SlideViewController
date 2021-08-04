@@ -43,5 +43,4 @@ private var xyLock: (x:Bool,y:Bool) = (false,false)
 
 To Fix:
 * Add accessibility
-* Single view mode is currently stuck in the upper left hand corner
-* ~~While devs should make sure they are inside safe area, add a more fool-proof way to ensure this.~~ Mostly fixed.
+* ~~Single view mode is currently stuck in the upper left hand corner~~
