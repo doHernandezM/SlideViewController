@@ -1,7 +1,9 @@
 #  SlideViewController
 
-![A SlideViewController](https://dohernandez.net/wp-content/uploads/sites/2/2021/08/IMG_0421.jpeg)
-![A SlideViewController](https://dohernandez.net/wp-content/uploads/sites/2/2021/08/IMG_0416.jpeg)
+<img src="githubMedia/slider1.PNG" alt="drawing" height="200"/>
+<img src="githubMedia/slider2.PNG" alt="drawing" height="200"/>
+<img src="githubMedia/slider3.PNG" alt="drawing" height="200"/>
+![A SlideViewController](/sliderDemo.MOV)
 
 Do you need to display multiple UIVIewControllers in a small space? Do their frames need to be user adjustable? That's what SlideViewController is for.
 Automatically displays up to four views depending on how many views it is sent. Can be configured with a horizontal or vertical orientation and to rotate clockwise or counter-clockwise.
@@ -19,8 +21,7 @@ For example:
 let subViewControllers = [zxyMapController, xyzFavesTableController, zxySettingController]
 let slideController = SlideViewController(newViewControllers: subViewControllers) //Sets view position based in order (ie 0 = Primary, 1 = Secondary, etc.)
 ```
-Funtionality options
-
+Funtionality options:
 * Many of these options as well as the options for the slider will be broken out to a struct that can be passed at any time. For now, many are private and are not meant to be called during runtime, but can.
 ```swift
 public var gridStyle:SlideViewPositions = .Primary
@@ -41,6 +42,11 @@ public var editModeActive = false
 private var xyLock: (x:Bool,y:Bool) = (false,false)
 ```
 
+Accessibility options:
+* SlideView Call out the slider location, but will not call out child view locations. Possible for future update.
+
+
 To Fix:
-* Add accessibility
+* ~~Add accessibility~~ Catalyst needs work./Slider's voiceover script needs to support internationalization.
+* When adding views, if you are in edit mode, new views do not get rounded corners.
 * ~~Single view mode is currently stuck in the upper left hand corner~~

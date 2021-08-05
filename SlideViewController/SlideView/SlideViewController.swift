@@ -38,6 +38,7 @@ class SlideViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         view.backgroundColor = .systemBackground
         self.view.clipsToBounds = true
         self.safeView.frame = self.view.frame
@@ -47,6 +48,9 @@ class SlideViewController: UIViewController {
         addControllersToView(newControllers: nil)
         
         updateViewLayouts()
+        
+        //Accessibility
+        self.configureAccessibility()
     }
    
     //MARK:Funtionality options
@@ -139,16 +143,16 @@ class SlideViewController: UIViewController {
     //This is what actually adds views to the slideView.
     //FIXME: Simple remove and replace. In the Future this should be a merge.
     fileprivate func addControllersToView(newControllers: [SlideViewPositions:UIViewController?]?) {
-//        removeAllViews()
         if newControllers != nil {controllers = newControllers!}
         for (_,viewController) in controllers.enumerated() {
-            if viewController.value != nil {
+            if viewController.value != nil {                
                 self.addChild(viewController.value!)
                 viewController.value!.view.frame = frameForPosition(position: viewController.key)
                 safeView.addSubview(viewController.value!.view)
                 viewController.value!.didMove(toParent: self)
             }
         }
+        
         
     }
     
@@ -184,7 +188,7 @@ class SlideViewController: UIViewController {
             viewController?.view.layer.cornerRadius = subviewCornerRadius
         }
         
-        UIView.animate(withDuration: 0.05) { [self] in
+        UIView.animate(withDuration: 0.1) { [self] in
             updateViewLayouts()
         }
     }
@@ -273,6 +277,14 @@ class SlideViewController: UIViewController {
         if gesture != nil {
             moveSliderTo(newLocation:gesture!.location(in: self.safeView))
         }
+        if gesture?.state == .began {
+            sliderView.accessibilityValue = "Slider is sliding"
+            UIAccessibility.post(notification: .pageScrolled, argument: sliderView.accessibilityValue)
+        }
+        if gesture?.state == .ended {
+            sliderView.accessibilityValue = sliderLocationString()
+            UIAccessibility.post(notification: .pageScrolled, argument: sliderView.accessibilityValue)
+        }
         
     }
     //LONGPRESS will toggle edit mode on and off.
@@ -297,6 +309,32 @@ class SlideViewController: UIViewController {
             
         }
     }
+    
+    //MARK:Accessibility
+    //Accessibility
+    func configureAccessibility() {
+        self.view.isAccessibilityElement = false
+        self.safeView.isAccessibilityElement = false
+        sliderView.isAccessibilityElement = true
+        sliderView.accessibilityLabel = "Slider"
+    }
+    func sliderLocationString() -> String {
+        var locationString = "Slider is: "
+        let locationLeft = "\(Int(sliderPostitionRelative.x * 100))% from the left,"
+        let locationTop = "\(Int(sliderPostitionRelative.y * 100))%, from the top, "
+        switch xyLock { //XY Loc lets us know which axis to announce
+        case (true,false):
+            locationString = locationString + locationLeft
+        case (false,true):
+            locationString = locationString + locationTop
+        case (false,false):
+            locationString = locationString + locationLeft + locationTop
+        default:
+            locationString = "" //returns  fully locks
+        }
+        return locationString
+    }
+
     
     //MARK:Draw code
     override func viewWillLayoutSubviews() {

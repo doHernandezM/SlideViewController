@@ -22,16 +22,16 @@ func createDevControllers(slideViewController:SlideViewController?,number:Int) -
     if number == 1 {return viewControllers}
 
 //    SlideCeption
-    var subsSlideViewControllers: [UIViewController] = []
-    for i in 0..<2 {
-        subsSlideViewControllers.append(UIViewController())
-        subsSlideViewControllers[i].view.backgroundColor = UIColor.randomColor()
-    }
-    viewControllers.append(SlideViewController(newViewControllers: subsSlideViewControllers))
-    
-    if number == 2 {return viewControllers}
+//    var subsSlideViewControllers: [UIViewController] = []
+//    for i in 0..<2 {
+//        subsSlideViewControllers.append(UIViewController())
+//        subsSlideViewControllers[i].view.backgroundColor = UIColor.randomColor()
+//    }
+//    viewControllers.append(SlideViewController(newViewControllers: subsSlideViewControllers))
+//
+//    if number == 2 {return viewControllers}
    
-    for i in 2..<(number) {
+    for i in 1..<(number) {
         viewControllers.append(UIViewController())
         viewControllers[i].view.backgroundColor = UIColor.randomColor()
     }
@@ -51,6 +51,13 @@ class DemoViewController: UIViewController, SlideViewControllerDelegate {
         clockwiseSwitch!.isOn = slideViewController!.rotateViewClockwise
         configurationStepper!.value = Double(slideViewController!.gridStyle.rawValue)
         viewCountStepper!.value = Double(slideViewController!.controllerCount())
+        
+        self.view!.accessibilityLabel = "DemoView"
+        self.view!.accessibilityHint = "Change settings"
+//        self.view!.isAccessibilityElement = false
+        clockwiseSwitch!.isAccessibilityElement = true
+        clockwiseSwitch!.accessibilityLabel = "Slider"
+
     }
     
     @IBOutlet weak var viewCountStepper: UIStepper?

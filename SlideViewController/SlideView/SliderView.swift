@@ -43,7 +43,7 @@ class dotView: SliderView {
         //Visuals
         self.backgroundColor = .systemBackground
         circleLayer.fillColor = self.backgroundColor?.cgColor
-                
+        
         //Frame
         self.frame = CGRect(x: 0.0, y: 0.0, width: slideView.view.bounds.width * 0.4, height: slideView.view.bounds.height * 0.4)
         
@@ -91,7 +91,7 @@ class CrosshairView: SliderView {
         //Visuals
         self.backgroundColor = .systemBackground
         circleLayer.fillColor = self.backgroundColor?.cgColor
-                
+        
         //Frame
         self.frame = CGRect(x: 0.0, y: 0.0, width: slideView.safeView.bounds.width * 0.4, height: slideView.view.bounds.height * 0.4)
         
@@ -139,7 +139,7 @@ class CrosshairView: SliderView {
         verticalLayer.frame.origin.x = (self.bounds.size.width / 2) - (thickness / 2)
         horizontalLayer.frame.origin.x =  (self.bounds.size.width / 2) - (horizontalLayer.frame.size.width / 2)
         horizontalLayer.frame.origin.y = (self.bounds.size.height / 2) - (thickness / 2)
-            
+        
     }
     
 }
