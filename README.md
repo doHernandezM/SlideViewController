@@ -3,7 +3,11 @@
 <img src="githubMedia/slider1.PNG" alt="drawing" height="200"/>
 <img src="githubMedia/slider2.PNG" alt="drawing" width="300"/>
 <img src="githubMedia/slider3.PNG" alt="drawing" height="200"/>
-![A SlideViewController](githubMedia/sliderDemo.MOV)
+<figure class="video_container">
+  <video controls="true" allowfullscreen="true">
+    <source src="githubMedia/sliderDemo.MOV" type="video/mp4">
+</video>
+</figure>
 
 Do you need to display multiple UIVIewControllers in a small space? Do their frames need to be user adjustable? That's what SlideViewController is for.
 Automatically displays up to four views depending on how many views it is sent. Can be configured with a horizontal or vertical orientation and to rotate clockwise or counter-clockwise.
