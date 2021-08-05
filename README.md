@@ -3,8 +3,7 @@
 <img src="githubMedia/slider1.PNG" alt="drawing" height="200"/>
 <img src="githubMedia/slider2.PNG" alt="drawing" width="300"/>
 <img src="githubMedia/slider3.PNG" alt="drawing" height="200"/>
-![A SlideViewController](githubMedia/sliderDemo.MOV)
-[![A SlideViewController]({githubMedia/slider3.PNG})]({githubMedia/sliderDemo.MOV} "Video")
+
 Do you need to display multiple UIVIewControllers in a small space? Do their frames need to be user adjustable? That's what SlideViewController is for.
 Automatically displays up to four views depending on how many views it is sent. Can be configured with a horizontal or vertical orientation and to rotate clockwise or counter-clockwise.
 This swift UIViewController subclass requires iOS 13+ or macOS Catalyst 10.15+.
