@@ -21,17 +21,17 @@ func createDevControllers(slideViewController:SlideViewController?,number:Int) -
     
     if number == 1 {return viewControllers}
 
-//    SlideCeption
-//    var subsSlideViewControllers: [UIViewController] = []
-//    for i in 0..<2 {
-//        subsSlideViewControllers.append(UIViewController())
-//        subsSlideViewControllers[i].view.backgroundColor = UIColor.randomColor()
-//    }
-//    viewControllers.append(SlideViewController(newViewControllers: subsSlideViewControllers))
-//
-//    if number == 2 {return viewControllers}
+//    SlideCeption - Cause it's cute
+    var subsSlideViewControllers: [UIViewController] = []
+    for i in 0..<2 {
+        subsSlideViewControllers.append(UIViewController())
+        subsSlideViewControllers[i].view.backgroundColor = UIColor.randomColor()
+    }
+    viewControllers.append(SlideViewController(newViewControllers: subsSlideViewControllers))
+
+    if number == 2 {return viewControllers}
    
-    for i in 1..<(number) {
+    for i in 2..<(number) {
         viewControllers.append(UIViewController())
         viewControllers[i].view.backgroundColor = UIColor.randomColor()
     }
@@ -48,8 +48,8 @@ class DemoViewController: UIViewController, SlideViewControllerDelegate {
         super.viewDidAppear(animated)
         
         if slideViewController == nil {return}
-        clockwiseSwitch!.isOn = slideViewController!.rotateViewClockwise
-        configurationStepper!.value = Double(slideViewController!.gridStyle.rawValue)
+        clockwiseSwitch!.isOn = slideViewController!.configuration.rotateClockwise
+        configurationStepper!.value = Double(slideViewController!.configuration.gridStyle.rawValue)
         viewCountStepper!.value = Double(slideViewController!.controllerCount())
         
         self.view!.accessibilityLabel = "DemoView"
@@ -81,7 +81,7 @@ class DemoViewController: UIViewController, SlideViewControllerDelegate {
         }
         
         if sender as? UISwitch == clockwiseSwitch {
-            slideViewController?.rotateViewClockwise = clockwiseSwitch!.isOn
+            slideViewController?.configuration.rotateClockwise = clockwiseSwitch!.isOn
             return
         }
     }

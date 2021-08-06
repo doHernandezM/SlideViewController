@@ -5,6 +5,7 @@
 <img src="githubMedia/slider3.PNG" alt="drawing" height="200"/>
 ![A SlideViewController](githubMedia/sliderDemo.MOV)
 [![A SlideViewController]({githubMedia/slider3.PNG})]({githubMedia/sliderDemo.MOV} "Video")
+
 Do you need to display multiple UIVIewControllers in a small space? Do their frames need to be user adjustable? That's what SlideViewController is for.
 Automatically displays up to four views depending on how many views it is sent. Can be configured with a horizontal or vertical orientation and to rotate clockwise or counter-clockwise.
 This swift UIViewController subclass requires iOS 13+ or macOS Catalyst 10.15+.
@@ -47,6 +48,7 @@ Accessibility options:
 
 
 To Fix:
-* ~~Add accessibility~~ Catalyst needs work./Slider's voiceover script needs to support internationalization.
+* ~~Add accessibility~~ Catalyst accessibility needs work/Slider's voiceover script needs to support internationalization, just english for now.
 * When adding views, if you are in edit mode, new views do not get rounded corners.
-* ~~Single view mode is currently stuck in the upper left hand corner~~
+* ~~Single view mode is currently stuck in the upper left hand corner.~~
+* Change "config" to primary view position and change SliderViewPosition to something else

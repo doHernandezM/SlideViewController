@@ -7,12 +7,32 @@
 
 import UIKit
 
+
+//Use this enum to define the SlideViews gridStyle as well as view position.
 public enum SlideViewPositions:Int {
     case Primary = 0, Secondary, Tertiary, Quaternary, Buffer
     
     static func ordered() -> [SlideViewPositions]{
         return[SlideViewPositions.Primary,SlideViewPositions.Secondary,SlideViewPositions.Tertiary,SlideViewPositions.Quaternary]
     }
+}
+
+struct SlideViewConfiguarationStruct {
+    var backgroundColor:UIColor = .systemBackground
+    var crosshairColor:UIColor = .systemGray
+    var crosshairActiveColor:UIColor = .systemBlue
+
+    var gridStyle:SlideViewPositions = .Primary
+    var rotateClockwise:Bool = true
+    var rotateViews:Bool = false
+    var stopEditAfterRotate:Bool = false//If a rotation event if fleeting, get out of it after one rotation.
+    var editModeActive:Bool = false//Edit mode can be set here, must update views after this is set.
+    var xyLock: (x:Bool,y:Bool) = (false,false)//Make it so the slider will only move in one direction.
+    
+    
+    //MARK:Slider
+    var slideViewBorderThickness = CGFloat(9)//Unless you have another mechanism for moving the slider, anything less than 9 is hard to tap.\
+    
 }
 
 class SlideViewController: UIViewController {
@@ -34,12 +54,11 @@ class SlideViewController: UIViewController {
         self.setViewControllers(newViewControllers: newViewControllers)
     }
     
-    //Use this enum to define the SlideViews gridStyle as well as view position.
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = self.configuration.backgroundColor
         self.view.clipsToBounds = true
         self.safeView.frame = self.view.frame
         self.view.addSubview(safeView)
@@ -54,18 +73,11 @@ class SlideViewController: UIViewController {
     }
    
     //MARK:Funtionality options
-    //Many of these options as well as the options for the slider will be broken out to a struc that can be passed at any time.
-    public var gridStyle:SlideViewPositions = .Primary
-    public var rotateViewClockwise = true
-    private var stopEditAfterRotate = false//If a rotation event if fleeting, get out of it after one rotation.
-    public var editModeActive = false//Edit mode can be set here, must update views after this is set.
-    private var xyLock: (x:Bool,y:Bool) = (false,false)//Make it so the slider will only move in one direction.
-    
+    var configuration: SlideViewConfiguarationStruct = SlideViewConfiguarationStruct()
     
     //MARK:Slider
     private var sliderView = CrosshairView(frame: CGRect())
-    private var slideViewBorderThickness = CGFloat(9)//Unless you have another mechanism for moving the slider, anything less than 9 is hard to tap.\
-    private var sliderPostitionPrecise = CGPoint() {//Use preciseSliderPosition or sliderPostitionRelative for better experience.
+    private var sliderPostitionPrecise = CGPoint() {//Use preciseSliderPosition or sliderPostitionRelative for better consistency.
         willSet(newPoint) {
             sliderPostitionRelative = CGPoint(x: newPoint.x / self.safeView.bounds.width, y: newPoint.y / self.safeView.bounds.height)
         }
@@ -102,7 +114,7 @@ class SlideViewController: UIViewController {
         var newLocationFiltered = newLocation
         
         if controllerCount() == 2 {
-            switch gridStyle {
+            switch configuration.gridStyle {
             case .Secondary,.Quaternary:
                 newLocationFiltered.x = newLocation.x
             default:
@@ -111,7 +123,7 @@ class SlideViewController: UIViewController {
             return newLocationFiltered
         }
         
-        switch xyLock {
+        switch configuration.xyLock {
         case (true,false):
             newLocationFiltered.x = newLocation.x
             newLocationFiltered.y = sliderPostitionPrecise.y
@@ -173,14 +185,14 @@ class SlideViewController: UIViewController {
     func toggleEditMode() {
         var subviewCornerRadius = CGFloat(0)
         
-        editModeActive = !editModeActive
-        _ = sliderView.editState(active: editModeActive)
+        configuration.editModeActive = !configuration.editModeActive
+        _ = sliderView.editState(active: configuration.editModeActive)
         
-        if editModeActive {
-            slideViewBorderThickness = slideViewBorderThickness * 3.5
+        if configuration.editModeActive {
+            configuration.slideViewBorderThickness = configuration.slideViewBorderThickness * 3.5
             subviewCornerRadius = CGFloat(5)
         } else {
-            slideViewBorderThickness = CGFloat(9)
+            configuration.slideViewBorderThickness = CGFloat(9)
             subviewCornerRadius = CGFloat(0)
         }
         
@@ -206,7 +218,7 @@ class SlideViewController: UIViewController {
         }
         
         reorderViewControllers(newOrder: positionKeys)
-        if stopEditAfterRotate {toggleEditMode()}
+        if configuration.stopEditAfterRotate {toggleEditMode()}
     }
     
     //Reorder Controller:
@@ -257,12 +269,12 @@ class SlideViewController: UIViewController {
     //Call this to change the views configuration(horizontal=Primary/vertical/top/bottom)
     func changeGridStyle(style:SlideViewPositions?) {
         if style != nil {
-            gridStyle = style!
+            configuration.gridStyle = style!
         } else {
-            if gridStyle.rawValue < SlideViewPositions.Quaternary.rawValue {//Almost often gets primary frames size
-                gridStyle = SlideViewPositions(rawValue: gridStyle.rawValue + 1)!
+            if configuration.gridStyle.rawValue < SlideViewPositions.Quaternary.rawValue {//Almost often gets primary frames size
+                configuration.gridStyle = SlideViewPositions(rawValue: configuration.gridStyle.rawValue + 1)!
             } else {
-                gridStyle = .Primary
+                configuration.gridStyle = .Primary
             }
         }
         //Once all the dict items are swapped, tell the views to redraw themselves
@@ -277,11 +289,13 @@ class SlideViewController: UIViewController {
         if gesture != nil {
             moveSliderTo(newLocation:gesture!.location(in: self.safeView))
         }
-        if gesture?.state == .began {
+        
+        //Accessibility Announcement
+        if gesture?.state == .began {//Slider is sliding
             sliderView.accessibilityValue = "Slider is sliding"
             UIAccessibility.post(notification: .pageScrolled, argument: sliderView.accessibilityValue)
         }
-        if gesture?.state == .ended {
+        if gesture?.state == .ended {//Slider location
             sliderView.accessibilityValue = sliderLocationString()
             UIAccessibility.post(notification: .pageScrolled, argument: sliderView.accessibilityValue)
         }
@@ -303,8 +317,17 @@ class SlideViewController: UIViewController {
     //TAP during edit mode will rotate the views.
     @objc func tap(_ gesture: UITapGestureRecognizer? = nil){
         if gesture != nil {
-            if editModeActive {
-                rotateViewControllers(clockwise: rotateViewClockwise)
+            if configuration.editModeActive {
+                if configuration.rotateViews {
+                    rotateViewControllers(clockwise: configuration.rotateClockwise)
+                } else {
+                 nextConfig(config: nil)
+                }
+                //TODO:Accessibility
+//                if gesture?.state == .ended {//MapView locations
+//                    sliderView.accessibilityValue = sliderLocationString()
+//                    UIAccessibility.post(notification: .pageScrolled, argument: sliderView.accessibilityValue)
+//                }
             }
             
         }
@@ -322,7 +345,7 @@ class SlideViewController: UIViewController {
         var locationString = "Slider is: "
         let locationLeft = "\(Int(sliderPostitionRelative.x * 100))% from the left,"
         let locationTop = "\(Int(sliderPostitionRelative.y * 100))%, from the top, "
-        switch xyLock { //XY Loc lets us know which axis to announce
+        switch configuration.xyLock { //XY Loc lets us know which axis to announce
         case (true,false):
             locationString = locationString + locationLeft
         case (false,true):
@@ -334,6 +357,21 @@ class SlideViewController: UIViewController {
         }
         return locationString
     }
+  
+    //FIXME: Announce of views, voiceover
+//    var subViewPositionStringArray: [String?] = [nil,nil,nil,nil] {
+//        didSet {
+//            subViewPositionString = ""
+//            for (_,theViewLabel) in subViewPositionStringArray.enumerated() {
+//                if let viewLabel = theViewLabel {
+////                        subViewPositionString = theViewLabel + "is in the "
+//                }
+//            }
+//        }
+//    }
+//
+//    var subViewPositionString = ""
+//
 
     
     //MARK:Draw code
@@ -350,14 +388,31 @@ class SlideViewController: UIViewController {
     
     //Call this after you've made a change to the views or the super.(Called automatically with viewWillLayoutSubviews)
     func updateViewLayouts() {
+//        subViewPositionStringArray = Array(repeating: nil, count: 4)
+        
         for (_,viewController) in controllers.enumerated() {
-            if viewController.value != nil {
-                viewController.value!.view.frame = frameForPosition(position: viewController.key)
+            if let theController = viewController.value {
+                let theControllerKey: SlideViewPositions = viewController.key
+                //Set the frame
+                theController.view.frame = frameForPosition(position: theControllerKey)
+                //
+//                subViewPositionStringArray[i] = theController.accessibilityLabel
             }
         }
         
     }
     //MARK:View Positions
+    
+    func nextConfig(config: SlideViewPositions?) {
+        if config != nil {
+            configuration.gridStyle = config!
+         } else {
+            configuration.gridStyle = (configuration.gridStyle == .Quaternary) ? .Primary : SlideViewPositions(rawValue: configuration.gridStyle.rawValue + 1) ?? .Primary
+         }
+        UIView.animate(withDuration: 0.25) { [self] in
+            updateViewLayouts()
+        }
+    }
     //Return a view frame based on location, primary frame location and number of views
     func frameForPosition(position:SlideViewPositions) -> CGRect {
         var newFrame = self.safeView.bounds
@@ -380,7 +435,7 @@ class SlideViewController: UIViewController {
             }
         //Four potential positions for a three view layout. 1,2,3,4. QUaternary always returns Primary JIC of rotation.
         case 3:
-            switch gridStyle {
+            switch configuration.gridStyle {
             case .Primary:
                 switch position {
                 case .Primary:
@@ -438,7 +493,7 @@ class SlideViewController: UIViewController {
             }
         //Two potention configs, horizonal(1,3) or vertical(2,4)
         case 2:
-            switch gridStyle {
+            switch configuration.gridStyle {
             case .Primary:
                 newFrame = (position == .Primary) || (position == .Quaternary) ? topFrame : bottomFrame
             case .Secondary:
@@ -508,20 +563,20 @@ class SlideViewController: UIViewController {
         return self.safeView.bounds.size.height
     }
     var halfSlideViewBorderThickness: CGFloat {
-        return (slideViewBorderThickness * 0.5)
+        return (configuration.slideViewBorderThickness * 0.5)
     }
     
     var topFrame:CGRect {
         return CGRect(x: left, y: top, width: self.safeView.bounds.size.width, height: preciseSliderPosition.y - halfSlideViewBorderThickness)
     }
     var bottomFrame:CGRect {
-        return CGRect(x: left, y: middleY, width: self.safeView.bounds.size.width, height: self.safeView.bounds.size.height - (primarySize.height + slideViewBorderThickness))
+        return CGRect(x: left, y: middleY, width: self.safeView.bounds.size.width, height: self.safeView.bounds.size.height - (primarySize.height + configuration.slideViewBorderThickness))
     }
     var leftFrame:CGRect {
         return CGRect(x: left, y: top, width: preciseSliderPosition.x - halfSlideViewBorderThickness, height: self.safeView.bounds.size.height)
     }
     var rightFrame:CGRect {
-        return CGRect(x: middleX, y: top, width: self.safeView.bounds.size.width - (primarySize.width + slideViewBorderThickness), height: self.safeView.bounds.size.height)
+        return CGRect(x: middleX, y: top, width: self.safeView.bounds.size.width - (primarySize.width + configuration.slideViewBorderThickness), height: self.safeView.bounds.size.height)
     }
     
     var primarySize:CGSize {
@@ -531,13 +586,13 @@ class SlideViewController: UIViewController {
         return CGRect(x: left, y: top, width: preciseSliderPosition.x - halfSlideViewBorderThickness, height: preciseSliderPosition.y - halfSlideViewBorderThickness)
     }
     var secondaryFrame:CGRect {
-        return CGRect(x: middleX, y: top, width: self.safeView.bounds.size.width - (primarySize.width + slideViewBorderThickness), height: preciseSliderPosition.y - halfSlideViewBorderThickness)
+        return CGRect(x: middleX, y: top, width: self.safeView.bounds.size.width - (primarySize.width + configuration.slideViewBorderThickness), height: preciseSliderPosition.y - halfSlideViewBorderThickness)
     }
     var tertiaryFrame:CGRect {
-        return CGRect(x: middleX, y: middleY, width:self.safeView.bounds.size.width - (primarySize.width + slideViewBorderThickness), height: self.safeView.bounds.size.height - (primarySize.height + slideViewBorderThickness))
+        return CGRect(x: middleX, y: middleY, width:self.safeView.bounds.size.width - (primarySize.width + configuration.slideViewBorderThickness), height: self.safeView.bounds.size.height - (primarySize.height + configuration.slideViewBorderThickness))
     }
     var quaternaryFrame:CGRect {
-        return CGRect(x: left, y: middleY, width: preciseSliderPosition.x - halfSlideViewBorderThickness, height: self.safeView.bounds.size.height - (primarySize.height + slideViewBorderThickness))
+        return CGRect(x: left, y: middleY, width: preciseSliderPosition.x - halfSlideViewBorderThickness, height: self.safeView.bounds.size.height - (primarySize.height + configuration.slideViewBorderThickness))
     }
     
     var middleX:CGFloat {
@@ -553,10 +608,10 @@ class SlideViewController: UIViewController {
         return (preciseSliderPosition.y / self.safeView.bounds.size.height)
     }
     var viewSizeWidth:CGFloat {
-        return (self.safeView.bounds.size.width - slideViewBorderThickness) * 0.5
+        return (self.safeView.bounds.size.width - configuration.slideViewBorderThickness) * 0.5
     }
     var viewSizeHeight:CGFloat {
-        return (self.safeView.bounds.size.height - slideViewBorderThickness) * 0.5
+        return (self.safeView.bounds.size.height - configuration.slideViewBorderThickness) * 0.5
     }
     var preciseSliderPosition:CGPoint {
         sliderPostitionPrecise = CGPoint(x: sliderPostitionRelative.x * self.safeView.bounds.width, y: sliderPostitionRelative.y * self.safeView.bounds.height)

@@ -15,6 +15,10 @@ class SliderView: UIView {
     
     func configure(slideView:SlideViewController) {
         slideView.view.addSubview(self)
+        
+        crosshairColor = slideView.configuration.crosshairColor
+        crosshairActiveColor = slideView.configuration.crosshairActiveColor
+
         update()
     }
     func update() {
@@ -41,8 +45,10 @@ class dotView: SliderView {
     
     override func configure(slideView:SlideViewController) {
         //Visuals
-        self.backgroundColor = .systemBackground
-        circleLayer.fillColor = self.backgroundColor?.cgColor
+        self.backgroundColor = slideView.configuration.backgroundColor
+        crosshairColor = slideView.configuration.crosshairColor
+        crosshairActiveColor = slideView.configuration.crosshairActiveColor
+        circleLayer.fillColor = slideView.configuration.backgroundColor.cgColor
         
         //Frame
         self.frame = CGRect(x: 0.0, y: 0.0, width: slideView.view.bounds.width * 0.4, height: slideView.view.bounds.height * 0.4)
@@ -89,8 +95,10 @@ class CrosshairView: SliderView {
     //MARK:Configuration
     override func configure(slideView:SlideViewController) {
         //Visuals
-        self.backgroundColor = .systemBackground
-        circleLayer.fillColor = self.backgroundColor?.cgColor
+        self.backgroundColor = slideView.configuration.backgroundColor
+        crosshairColor = slideView.configuration.crosshairColor
+        crosshairActiveColor = slideView.configuration.crosshairActiveColor
+        circleLayer.fillColor = slideView.configuration.backgroundColor.cgColor
         
         //Frame
         self.frame = CGRect(x: 0.0, y: 0.0, width: slideView.safeView.bounds.width * 0.4, height: slideView.view.bounds.height * 0.4)
