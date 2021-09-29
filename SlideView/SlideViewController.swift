@@ -59,7 +59,7 @@ open class SlideViewController: UIViewController {
     public required init?(coder: NSCoder) {
         super.init(coder: coder)
         self.setViewControllers(newViewControllers: [])
-    setViewControllers(newViewControllers: createDevControllers(slideViewController: self, number: 2))//DEV:::DELETE for release
+//    setViewControllers(newViewControllers: createDevControllers(slideViewController: self, number: 2))//DEV:::DELETE for release
     }
     ///Use this to init with custom view controllers
     public init(newViewControllers: [UIViewController?]) {
