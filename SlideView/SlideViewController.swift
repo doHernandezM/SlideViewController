@@ -67,7 +67,7 @@ open class SlideViewController: UIViewController {
     }
     
     
-    public override func viewDidLoad() {
+    open override func viewDidLoad() {
         ///Setup View
         super.viewDidLoad()
         view.backgroundColor = self.configuration.backgroundColor
