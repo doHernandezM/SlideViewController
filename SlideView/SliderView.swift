@@ -10,7 +10,7 @@ import UIKit
 fileprivate var crosshairColor: UIColor = UIColor.systemGray
 fileprivate var crosshairActiveColor: UIColor = UIColor.systemBlue
 
-class SliderView: UIView {
+public class SliderView: UIView {
     fileprivate var editStateActive = false
     
     func configure(slideView:SlideViewController) {
@@ -37,7 +37,7 @@ class SliderView: UIView {
     }
 }
 
-class dotView: SliderView {
+public class dotView: SliderView {
     private var circleLayer = CAShapeLayer()
     private let circleRadius: CGFloat = 75
     var thickness = CGFloat(3.0)
@@ -83,7 +83,7 @@ class dotView: SliderView {
 }
 
 
-class CrosshairView: SliderView {
+public class CrosshairView: SliderView {
     //Crosshair is CALayers
     private var verticalLayer = CALayer()
     private var horizontalLayer = CALayer()

@@ -17,7 +17,7 @@ public enum Positions:Int {
     }
 }
 
-struct SlideViewConfiguarationStruct {
+public struct SlideViewConfiguarationStruct {
     var backgroundColor:UIColor = .systemBackground
     var crosshairColor:UIColor = .systemGray
     var crosshairActiveColor:UIColor = .systemBlue
@@ -43,31 +43,31 @@ struct SlideViewConfiguarationStruct {
     }
 }
 
-class SlideViewController: UIViewController {
+public class SlideViewController: UIViewController {
     ///This is where are the views live.
     ///
     ///To make life we make one master view that conforms to safe area, then we build everything off of that.
     var safeView: UIView = UIView(frame: CGRect.zero)
-    var controllers: [Positions:UIViewController?] = [:]
+    public var controllers: [Positions:UIViewController?] = [:]
     
     //MARK: Inits
     ///They are all the same.
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+    public override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
     }
     ///We are creating generic view controllers for demo. Otherwise insert your own view controllers here with setViewControllers
-    required init?(coder: NSCoder) {
+    public required init?(coder: NSCoder) {
         super.init(coder: coder)
 //        setViewControllers(newViewControllers: createDevControllers(slideViewController: self, number: 2))//DEV:::DELETE for release
     }
     ///Use this to init with custom view controllers
-    init(newViewControllers: [UIViewController?]) {
+    public init(newViewControllers: [UIViewController?]) {
         super.init(nibName: nil, bundle: nil)
         self.setViewControllers(newViewControllers: newViewControllers)
     }
     
     
-    override func viewDidLoad() {
+    public override func viewDidLoad() {
         ///Setup View
         super.viewDidLoad()
         view.backgroundColor = self.configuration.backgroundColor
@@ -87,9 +87,9 @@ class SlideViewController: UIViewController {
     }
     
     //MARK: Funtionality options
-    var configuration: SlideViewConfiguarationStruct = SlideViewConfiguarationStruct()
+    public var configuration: SlideViewConfiguarationStruct = SlideViewConfiguarationStruct()
     //Sets the configuration during runtime, then tells the view to update itself and it's children.
-    func setConfiguration(newConfiguration: SlideViewConfiguarationStruct?) {
+    public func setConfiguration(newConfiguration: SlideViewConfiguarationStruct?) {
         if newConfiguration == nil {
             self.configuration = SlideViewConfiguarationStruct()
         } else {
@@ -407,13 +407,13 @@ class SlideViewController: UIViewController {
     
     
     //MARK:Draw code
-    override func viewWillLayoutSubviews() {
+    public override func viewWillLayoutSubviews() {
         let guide = view.safeAreaLayoutGuide
         self.safeView.frame = guide.layoutFrame
         //
         updateViewLayouts()
     }
-    override func viewDidLayoutSubviews() {
+    public override func viewDidLayoutSubviews() {
         moveSliderTo(newLocation: preciseSliderPosition)
         sliderView.update()
     }
