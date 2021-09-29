@@ -20,33 +20,41 @@ For example:
 let subViewControllers = [zxyMapController, xyzFavesTableController, zxySettingController]
 let slideController = SlideViewController(newViewControllers: subViewControllers) //Sets view position based in order (ie 0 = Primary, 1 = Secondary, etc.)
 ```
-Funtionality options:
-* Many of these options as well as the options for the slider will be broken out to a struct that can be passed at any time. For now, many are private and are not meant to be called during runtime, but can.
+## Funtionality options:
+Many of these options are not meant to be called during runtime, but can be.
+* This struct passes configuration options to the SlideViewController. 
 ```swift
-public var gridStyle:SlideViewPositions = .Primary
-public var rotateViewClockwise = false
+struct SlideViewConfiguarationStruct {}
+```
+* Color and Size options:
+```swift
+func setConfiguration(newConfiguration: SlideViewConfiguarationStruct?)
+
+var backgroundColor:UIColor = .systemBackground
+var crosshairColor:UIColor = .systemGray
+var crosshairActiveColor:UIColor = .systemBlue
+```
+* Inter-view border thickness. Unless you have another mechanism for moving the slider, anything less than 9 is hard to tap.
+
+```swift
+var slideViewBorderThickness = CGFloat(9)
+```
+* Interface options:
+```swift
+var gridStyle:SlideViewPositions = .Primary
+var rotateClockwise:Bool = true
+var rotateViews:Bool = false
+var stopEditAfterRotate:Bool = false//If a rotation event if fleeting, get out of it after one rotation.
+var editModeActive:Bool = false//Edit mode can be set here, must update views after this is set.
+var xyLock: (x:Bool,y:Bool) = (false,false)//Make it so the slider will only move in one direction.
 ```
 
-* If a rotation event is fleeting, get out of it after one rotation.
-```swift
-private var stopEditAfterRotate = false
-```
-
-* Edit mode can be set here, must update views after this is set.
-```swift
-public var editModeActive = false
-```
-* Make it so the slider will only move in one direction.
-```swift
-private var xyLock: (x:Bool,y:Bool) = (false,false)
-```
-
-Accessibility options:
-* SlideView Call out the slider location, but will not call out child view locations. Possible for future update.
+## Accessibility options:
+* SlideView calls out the slider location, but will not call out child view locations. Possible for future update.
 
 
-To Fix:
+## To Fix:
 * ~~Add accessibility~~ Catalyst accessibility needs work/Slider's voiceover script needs to support internationalization, just english for now.
-* When adding views, if you are in edit mode, new views do not get rounded corners.
+* ~~When adding views, if you are in edit mode, new views do not get rounded corners.
 * ~~Single view mode is currently stuck in the upper left hand corner.~~
 * Change "config" to primary view position and change SliderViewPosition to something else
