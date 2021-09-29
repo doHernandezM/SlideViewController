@@ -127,7 +127,7 @@ open class SlideViewController: UIViewController {
     }
     
     ///Move slider here.
-    func moveSliderTo(newLocation:CGPoint) {
+    open func moveSliderTo(newLocation:CGPoint) {
         sliderPostitionPrecise = flitersSliderXY(newLocation: newLocation)
         
         sliderView.center = sliderPostitionPrecise
@@ -165,7 +165,7 @@ open class SlideViewController: UIViewController {
     }
     
     //MARK: Adding/Removing
-    func addViewControllers(newViewControllers: [UIViewController?]) {
+    open func addViewControllers(newViewControllers: [UIViewController?]) {
         self.setViewControllers(newViewControllers: newViewControllers)
         self.addControllersToView(newControllers: self.controllers)
         setEditMode(configuration.editModeActive)
@@ -194,7 +194,7 @@ open class SlideViewController: UIViewController {
     }
     
     //
-    func removeAllViews() {
+    public func removeAllViews() {
         for (_,controllerObject) in controllers.enumerated() {
             if controllerObject.value != nil {
                 let oldController = controllerObject.value!
@@ -208,7 +208,7 @@ open class SlideViewController: UIViewController {
     
     //MARK: Edit Mode
     //Long press let's up control which view is where.
-    func setEditMode(_ editModeOn:Bool?) {
+    open func setEditMode(_ editModeOn:Bool?) {
         
         if editModeOn != nil {
             configuration.editModeActive = editModeOn!
@@ -239,7 +239,7 @@ open class SlideViewController: UIViewController {
     //MARK: Moving Views
     //Rotate Controller:
     //Make an array of all the keys (1,2,etc) sort one way or another
-    func rotateViewControllers(clockwise:Bool?) {
+    open func rotateViewControllers(clockwise:Bool?) {
         let rotationDirection = clockwise ?? false
         var positionKeys: [Positions] = Array(controllers.keys)
         
@@ -254,7 +254,7 @@ open class SlideViewController: UIViewController {
     }
     
     //Reorder Controller:
-    func reorderViewControllers(newOrder:[Positions]) {
+    public func reorderViewControllers(newOrder:[Positions]) {
         var positionKeys: [Positions] = newOrder
         
         swapControllerPositions(&positionKeys)// Remove the buffer from the position keys
@@ -299,7 +299,7 @@ open class SlideViewController: UIViewController {
     }
     
     //Call this to change the views configuration(horizontal=Primary/vertical/top/bottom)
-    func changeGridStyle(style:Positions?) {
+    public func changeGridStyle(style:Positions?) {
         if style != nil {
             configuration.gridStyle = style!
         } else {
@@ -317,7 +317,7 @@ open class SlideViewController: UIViewController {
     
     //MARK: User interaction
     //PAN will move the slider around.
-    @objc func pan(_ gesture: UIPanGestureRecognizer? = nil)  {
+    @objc public func pan(_ gesture: UIPanGestureRecognizer? = nil)  {
         if gesture != nil {
             moveSliderTo(newLocation:gesture!.location(in: self.safeView))
         }
@@ -334,7 +334,7 @@ open class SlideViewController: UIViewController {
         
     }
     //LONGPRESS will toggle edit mode on and off.
-    @objc func longPress(_ gesture: UIPanGestureRecognizer? = nil)  {
+    @objc public func longPress(_ gesture: UIPanGestureRecognizer? = nil)  {
         if gesture != nil {
             switch gesture?.state {
             case .began:
@@ -347,7 +347,7 @@ open class SlideViewController: UIViewController {
         }
     }
     //TAP during edit mode will rotate the views.
-    @objc func tap(_ gesture: UITapGestureRecognizer? = nil){
+    @objc public func tap(_ gesture: UITapGestureRecognizer? = nil){
         if gesture != nil {
             if configuration.editModeActive {
                 if configuration.rotateViews {
@@ -367,13 +367,13 @@ open class SlideViewController: UIViewController {
     
     //MARK: Accessibility
     //Accessibility
-    func configureAccessibility() {
+    public func configureAccessibility() {
         self.view.isAccessibilityElement = false
         self.safeView.isAccessibilityElement = false
         sliderView.isAccessibilityElement = true
         sliderView.accessibilityLabel = "Slider"
     }
-    func sliderLocationString() -> String {
+    public func sliderLocationString() -> String {
         var locationString = "Slider is: "
         let locationLeft = "\(Int(sliderPostitionRelative.x * 100))% from the left,"
         let locationTop = "\(Int(sliderPostitionRelative.y * 100))%, from the top, "
@@ -407,7 +407,7 @@ open class SlideViewController: UIViewController {
     
     
     //MARK:Draw code
-    public override func viewWillLayoutSubviews() {
+    open override func viewWillLayoutSubviews() {
         let guide = view.safeAreaLayoutGuide
         self.safeView.frame = guide.layoutFrame
         //
@@ -419,7 +419,7 @@ open class SlideViewController: UIViewController {
     }
     
     //Call this after you've made a change to the views or the super.(Called automatically with viewWillLayoutSubviews)
-    func updateViewLayouts() {
+    open func updateViewLayouts() {
                 if (controllerCount()) == 2 && configuration.automaticallyAdjustedLayout {
                         if isWide && configIsWide {configuration.gridStyle = .Secondary}
                         if !isWide && !configIsWide {configuration.gridStyle = .Primary}
@@ -439,7 +439,7 @@ open class SlideViewController: UIViewController {
     }
     
     //MARK: View Positions
-    func nextConfig(config: Positions?) {
+    public func nextConfig(config: Positions?) {
         if config != nil {
             configuration.gridStyle = config!
         } else if (controllerCount() == 2) && (configuration.automaticallyAdjustedLayout) {
@@ -463,7 +463,7 @@ open class SlideViewController: UIViewController {
         }
     }
     //Return a view frame based on location, primary frame location and number of views
-    func frameForPosition(position:Positions) -> CGRect {
+    open func frameForPosition(position:Positions) -> CGRect {
         var newFrame = self.safeView.bounds
         let numberOfViews = controllerCount()
         
