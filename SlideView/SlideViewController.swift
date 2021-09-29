@@ -32,6 +32,7 @@ public struct SlideViewConfiguarationStruct {
     ///Edit mode can be set here, must update views after this is set.
     public var editModeActive:Bool = false
     ///Make it so the slider will only move in one direction.
+    public var autoXYLock: Bool = true
     public var xyLock: (x:Bool,y:Bool) = (false,false)
     
     ///Unless you have another mechanism for moving the slider, anything less than 9 is hard to tap.
@@ -59,7 +60,7 @@ open class SlideViewController: UIViewController {
     public required init?(coder: NSCoder) {
         super.init(coder: coder)
         self.setViewControllers(newViewControllers: [])
-//    setViewControllers(newViewControllers: createDevControllers(slideViewController: self, number: 2))//DEV:::DELETE for release
+//        setViewControllers(newViewControllers: createDevControllers(slideViewController: self, number: 2))//DEV:::DELETE for release
     }
     ///Use this to init with custom view controllers
     public init(newViewControllers: [UIViewController?]) {
@@ -146,11 +147,8 @@ open class SlideViewController: UIViewController {
             default:
                 newLocationFiltered.y = newLocation.y
             }
-//            return newLocationFiltered
         }
         
-        print(configuration.xyLock)
-    
         switch configuration.xyLock {
         case (true,false):
             newLocationFiltered.x = newLocation.x
@@ -188,6 +186,7 @@ open class SlideViewController: UIViewController {
         for (_,viewController) in controllers.enumerated() {
             if viewController.value != nil {
                 self.addChild(viewController.value!)
+                viewController.value!.view.clipsToBounds = true
                 viewController.value!.view.frame = frameForPosition(position: viewController.key)
                 safeView.addSubview(viewController.value!.view)
                 viewController.value!.didMove(toParent: self)
@@ -423,9 +422,19 @@ open class SlideViewController: UIViewController {
     
     //Call this after you've made a change to the views or the super.(Called automatically with viewWillLayoutSubviews)
     open func updateViewLayouts() {
-                if (controllerCount()) == 2 && configuration.automaticallyAdjustedLayout {
-                        if isWide && configIsWide {configuration.gridStyle = .Secondary}
-                        if !isWide && !configIsWide {configuration.gridStyle = .Primary}
+        if (controllerCount()) == 2 && configuration.automaticallyAdjustedLayout {
+            if isWide && configIsWide {
+                configuration.gridStyle = .Secondary
+                if configuration.autoXYLock {
+                    configuration.xyLock = (true,false)
+                }
+            }
+            if !isWide && !configIsWide {
+                configuration.gridStyle = .Primary
+                if configuration.autoXYLock {
+                    configuration.xyLock = (false,true)
+                }
+            }
         }
         
         
