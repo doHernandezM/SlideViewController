@@ -77,7 +77,7 @@ class DemoViewController: UIViewController, SlideViewControllerDelegate {
         }
         
         if sender as? UIStepper == configurationStepper {
-            let style: SVPositions? = SVPositions(rawValue: Int((sender as! UIStepper).value))
+            let style: Positions? = Positions(rawValue: Int((sender as! UIStepper).value))
             slideViewController!.changeGridStyle(style:style)
             return
         }

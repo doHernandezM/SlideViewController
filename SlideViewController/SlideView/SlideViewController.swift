@@ -9,11 +9,11 @@ import UIKit
 
 
 ///Use this enum to define the SlideViews gridStyle as well as view position.
-public enum SVPositions:Int {
+public enum Positions:Int {
     case Primary = 0, Secondary, Tertiary, Quaternary, Buffer
     
-    static func ordered() -> [SVPositions]{
-        return[SVPositions.Primary,SVPositions.Secondary,SVPositions.Tertiary,SVPositions.Quaternary]
+    static func ordered() -> [Positions]{
+        return[Positions.Primary,Positions.Secondary,Positions.Tertiary,Positions.Quaternary]
     }
 }
 
@@ -22,7 +22,7 @@ struct SlideViewConfiguarationStruct {
     var crosshairColor:UIColor = .systemGray
     var crosshairActiveColor:UIColor = .systemBlue
     
-    var gridStyle:SVPositions = .Primary
+    var gridStyle:Positions = .Primary
     ///Display horizontal layouts in Portrait and vertical in Landscape.
     var automaticallyAdjustedLayout:Bool = true
     var rotateClockwise:Bool = true
@@ -44,11 +44,11 @@ struct SlideViewConfiguarationStruct {
 }
 
 class SlideViewController: UIViewController {
-    ///This is wehere are the views live.
+    ///This is where are the views live.
     ///
     ///To make life we make one master view that conforms to safe area, then we build everything off of that.
     var safeView: UIView = UIView(frame: CGRect.zero)
-    var controllers: [SVPositions:UIViewController?] = [:]
+    var controllers: [Positions:UIViewController?] = [:]
     
     //MARK: Inits
     ///They are all the same.
@@ -172,15 +172,15 @@ class SlideViewController: UIViewController {
     }
     
     fileprivate func setViewControllers(newViewControllers:[UIViewController?]) {
-        controllers[.Primary] = newViewControllers.count > 0 ? newViewControllers[SVPositions.Primary.rawValue] : nil
-        controllers[.Secondary] = newViewControllers.count > 1 ? newViewControllers[SVPositions.Secondary.rawValue] : nil
-        controllers[.Tertiary] = newViewControllers.count > 2 ? newViewControllers[SVPositions.Tertiary.rawValue] : nil
-        controllers[.Quaternary] = newViewControllers.count > 3 ? newViewControllers[SVPositions.Quaternary.rawValue] : nil
+        controllers[.Primary] = newViewControllers.count > 0 ? newViewControllers[Positions.Primary.rawValue] : nil
+        controllers[.Secondary] = newViewControllers.count > 1 ? newViewControllers[Positions.Secondary.rawValue] : nil
+        controllers[.Tertiary] = newViewControllers.count > 2 ? newViewControllers[Positions.Tertiary.rawValue] : nil
+        controllers[.Quaternary] = newViewControllers.count > 3 ? newViewControllers[Positions.Quaternary.rawValue] : nil
     }
     
     //This is what actually adds views to the slideView.
     //FIXME: Simple remove and replace. In the Future this should be a merge.
-    fileprivate func addControllersToView(newControllers: [SVPositions:UIViewController?]?) {
+    fileprivate func addControllersToView(newControllers: [Positions:UIViewController?]?) {
         if newControllers != nil {controllers = newControllers!}
         for (_,viewController) in controllers.enumerated() {
             if viewController.value != nil {
@@ -241,7 +241,7 @@ class SlideViewController: UIViewController {
     //Make an array of all the keys (1,2,etc) sort one way or another
     func rotateViewControllers(clockwise:Bool?) {
         let rotationDirection = clockwise ?? false
-        var positionKeys: [SVPositions] = Array(controllers.keys)
+        var positionKeys: [Positions] = Array(controllers.keys)
         
         if rotationDirection {
             positionKeys = positionKeys.sorted(by: { $0.rawValue > $1.rawValue })
@@ -254,8 +254,8 @@ class SlideViewController: UIViewController {
     }
     
     //Reorder Controller:
-    func reorderViewControllers(newOrder:[SVPositions]) {
-        var positionKeys: [SVPositions] = newOrder
+    func reorderViewControllers(newOrder:[Positions]) {
+        var positionKeys: [Positions] = newOrder
         
         swapControllerPositions(&positionKeys)// Remove the buffer from the position keys
         //Find nonNil and nil views and puts them into the correct order.
@@ -263,7 +263,7 @@ class SlideViewController: UIViewController {
         //We don't need to do any of this if there is only 1 view.
         if controllerCount() > 1 {
             
-            var controllersBuffer: [SVPositions:UIViewController?] = controllers//We need a place to shuffle our views and nils into
+            var controllersBuffer: [Positions:UIViewController?] = controllers//We need a place to shuffle our views and nils into
             var nextNilView = controllers.count //count down from the end of the dict
             var nextView = 0 //count up from the beginning of the dict
             if controllers.count > 1 {
@@ -286,8 +286,8 @@ class SlideViewController: UIViewController {
     }
     
     //Get an array of position keys, add a buffer key and swap position keys. Then update all of the frames.
-    fileprivate func swapControllerPositions(_ positionKeys: inout [SVPositions]) {
-        positionKeys.insert(SVPositions.Buffer, at: 0)
+    fileprivate func swapControllerPositions(_ positionKeys: inout [Positions]) {
+        positionKeys.insert(Positions.Buffer, at: 0)
         //Swap keys on each dictionary item
         controllers[positionKeys[0]] = controllers[positionKeys[1]]
         controllers[positionKeys[1]] = controllers[positionKeys[2]]
@@ -299,12 +299,12 @@ class SlideViewController: UIViewController {
     }
     
     //Call this to change the views configuration(horizontal=Primary/vertical/top/bottom)
-    func changeGridStyle(style:SVPositions?) {
+    func changeGridStyle(style:Positions?) {
         if style != nil {
             configuration.gridStyle = style!
         } else {
-            if configuration.gridStyle.rawValue < SVPositions.Quaternary.rawValue {//Almost often gets primary frames size
-                configuration.gridStyle = SVPositions(rawValue: configuration.gridStyle.rawValue + 1)!
+            if configuration.gridStyle.rawValue < Positions.Quaternary.rawValue {//Almost often gets primary frames size
+                configuration.gridStyle = Positions(rawValue: configuration.gridStyle.rawValue + 1)!
             } else {
                 configuration.gridStyle = .Primary
             }
@@ -428,7 +428,7 @@ class SlideViewController: UIViewController {
         
         for (_,viewController) in controllers.enumerated() {
             if let theController = viewController.value {
-                let theControllerKey: SVPositions = viewController.key
+                let theControllerKey: Positions = viewController.key
                 //Set the frame
                 theController.view.frame = frameForPosition(position: theControllerKey)
                 
@@ -439,7 +439,7 @@ class SlideViewController: UIViewController {
     }
     
     //MARK: View Positions
-    func nextConfig(config: SVPositions?) {
+    func nextConfig(config: Positions?) {
         if config != nil {
             configuration.gridStyle = config!
         } else if (controllerCount() == 2) && (configuration.automaticallyAdjustedLayout) {
@@ -456,14 +456,14 @@ class SlideViewController: UIViewController {
                 break
             }
         } else {
-            configuration.gridStyle = (configuration.gridStyle == .Quaternary) ? .Primary : SVPositions(rawValue: configuration.gridStyle.rawValue + 1) ?? .Primary
+            configuration.gridStyle = (configuration.gridStyle == .Quaternary) ? .Primary : Positions(rawValue: configuration.gridStyle.rawValue + 1) ?? .Primary
         }
         UIView.animate(withDuration: 0.25) { [self] in
             updateViewLayouts()
         }
     }
     //Return a view frame based on location, primary frame location and number of views
-    func frameForPosition(position:SVPositions) -> CGRect {
+    func frameForPosition(position:Positions) -> CGRect {
         var newFrame = self.safeView.bounds
         let numberOfViews = controllerCount()
         
