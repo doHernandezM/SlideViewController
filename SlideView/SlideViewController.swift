@@ -588,7 +588,7 @@ open class SlideViewController: UIViewController {
     }
     
     //MARK: Utilities
-    func controllerCount() -> Int {
+    public func controllerCount() -> Int {
         var count = 0
         
         if (controllers[.Primary] == nil) {count += 0
