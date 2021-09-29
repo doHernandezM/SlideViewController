@@ -58,7 +58,8 @@ open class SlideViewController: UIViewController {
     ///We are creating generic view controllers for demo. Otherwise insert your own view controllers here with setViewControllers
     public required init?(coder: NSCoder) {
         super.init(coder: coder)
-//        setViewControllers(newViewControllers: createDevControllers(slideViewController: self, number: 2))//DEV:::DELETE for release
+        self.setViewControllers(newViewControllers: [])
+    setViewControllers(newViewControllers: createDevControllers(slideViewController: self, number: 2))//DEV:::DELETE for release
     }
     ///Use this to init with custom view controllers
     public init(newViewControllers: [UIViewController?]) {
@@ -145,9 +146,11 @@ open class SlideViewController: UIViewController {
             default:
                 newLocationFiltered.y = newLocation.y
             }
-            return newLocationFiltered
+//            return newLocationFiltered
         }
         
+        print(configuration.xyLock)
+    
         switch configuration.xyLock {
         case (true,false):
             newLocationFiltered.x = newLocation.x
