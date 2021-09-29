@@ -18,27 +18,27 @@ public enum Positions:Int {
 }
 
 public struct SlideViewConfiguarationStruct {
-    var backgroundColor:UIColor = .systemBackground
-    var crosshairColor:UIColor = .systemGray
-    var crosshairActiveColor:UIColor = .systemBlue
+    public var backgroundColor:UIColor = .systemBackground
+    public var crosshairColor:UIColor = .systemGray
+    public var crosshairActiveColor:UIColor = .systemBlue
     
-    var gridStyle:Positions = .Primary
+    public var gridStyle:Positions = .Primary
     ///Display horizontal layouts in Portrait and vertical in Landscape.
-    var automaticallyAdjustedLayout:Bool = true
-    var rotateClockwise:Bool = true
-    var rotateViews:Bool = false
+    public var automaticallyAdjustedLayout:Bool = true
+    public var rotateClockwise:Bool = true
+    public var rotateViews:Bool = false
     ///If a rotation event is fleeting, get out of it after one rotation.
-    var stopEditAfterRotate:Bool = false
+    public var stopEditAfterRotate:Bool = false
     ///Edit mode can be set here, must update views after this is set.
-    var editModeActive:Bool = false
+    public var editModeActive:Bool = false
     ///Make it so the slider will only move in one direction.
-    var xyLock: (x:Bool,y:Bool) = (false,false)
+    public var xyLock: (x:Bool,y:Bool) = (false,false)
     
     ///Unless you have another mechanism for moving the slider, anything less than 9 is hard to tap.
-    let defaultSlideViewBorderThickness = CGFloat(9)
-    var currentSlideViewBorderThickness = CGFloat(0)
+    public let defaultSlideViewBorderThickness = CGFloat(9)
+    public var currentSlideViewBorderThickness = CGFloat(0)
     
-    init() {
+    public init() {
         currentSlideViewBorderThickness = defaultSlideViewBorderThickness
     }
 }
