@@ -568,18 +568,19 @@ open class SlideViewController: UIViewController {
             }
             //Better single view options needed in future.
         default:
-            switch position {
-            case .Primary:
-                newFrame = primaryFrame
-            case .Secondary:
-                newFrame = secondaryFrame
-            case .Tertiary:
-                newFrame = tertiaryFrame
-            case .Quaternary:
-                newFrame = quaternaryFrame
-            default:
-                newFrame = CGRect.zero //Always return zero in weird cases
-            }
+//            switch position {
+//            case .Primary:
+//                newFrame = primaryFrame
+//            case .Secondary:
+//                newFrame = secondaryFrame
+//            case .Tertiary:
+//                newFrame = tertiaryFrame
+//            case .Quaternary:
+//                newFrame = quaternaryFrame
+//            default:
+//                newFrame = fullFrame //Always return full in weird cases
+//            }
+            newFrame = fullFrame
             
         }
         
@@ -627,6 +628,9 @@ open class SlideViewController: UIViewController {
         return (configuration.currentSlideViewBorderThickness * 0.5)
     }
     
+    var fullFrame:CGRect {
+        return CGRect(x: left, y: top, width: right, height: bottom)
+    }
     var topFrame:CGRect {
         return CGRect(x: left, y: top, width: self.safeView.bounds.size.width, height: preciseSliderPosition.y - halfSlideViewBorderThickness)
     }
