@@ -14,7 +14,7 @@ let package = Package(
         .library(
             name: "SlideView",
             targets: ["SlideView"],
-            path: "SlideViewController/SlideView"),
+            path: "SlideView"),
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
