@@ -10,7 +10,7 @@ import UIKit
 fileprivate var crosshairColor: UIColor = UIColor.systemGray
 fileprivate var crosshairActiveColor: UIColor = UIColor.systemBlue
 
-public class SliderView: UIView {
+open class SliderView: UIView {
     fileprivate var editStateActive = false
     
     func configure(slideView:SlideViewController) {

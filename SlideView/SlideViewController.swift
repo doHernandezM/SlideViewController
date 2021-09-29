@@ -43,7 +43,7 @@ public struct SlideViewConfiguarationStruct {
     }
 }
 
-public class SlideViewController: UIViewController {
+open class SlideViewController: UIViewController {
     ///This is where are the views live.
     ///
     ///To make life we make one master view that conforms to safe area, then we build everything off of that.
