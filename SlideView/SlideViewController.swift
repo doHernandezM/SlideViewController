@@ -150,10 +150,10 @@ open class SlideViewController: UIViewController {
         }
         
         switch configuration.xyLock {
-        case (true,false):
+        case (false,true):
             newLocationFiltered.x = newLocation.x
             newLocationFiltered.y = sliderPostitionPrecise.y
-        case (false,true):
+        case (true,false):
             newLocationFiltered.x = sliderPostitionPrecise.x
             newLocationFiltered.y = newLocation.y
         case (false,false):
