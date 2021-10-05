@@ -89,7 +89,11 @@ open class SlideViewController: UIViewController {
     }
     
     //MARK: Funtionality options
-    public var configuration: SlideViewConfiguarationStruct = SlideViewConfiguarationStruct()
+    public var configuration: SlideViewConfiguarationStruct = SlideViewConfiguarationStruct() {
+        didSet{
+            self.setConfiguration(newConfiguration: configuration)
+        }
+    }
     //Sets the configuration during runtime, then tells the view to update itself and it's children.
     public func setConfiguration(newConfiguration: SlideViewConfiguarationStruct?) {
         if newConfiguration == nil {
