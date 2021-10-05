@@ -91,6 +91,7 @@ open class SlideViewController: UIViewController {
     //MARK: Funtionality options
     public var configuration: SlideViewConfiguarationStruct = SlideViewConfiguarationStruct() {
         didSet{
+            self.sliderView.configure(slideView: self)
             self.updateViewLayouts()
         }
     }
