@@ -102,6 +102,7 @@ open class SlideViewController: UIViewController {
         } else {
             self.configuration = newConfiguration!
         }
+        self.updateViewLayouts()
     }
     
     //MARK: Slider
