@@ -91,7 +91,7 @@ open class SlideViewController: UIViewController {
     //MARK: Funtionality options
     public var configuration: SlideViewConfiguarationStruct = SlideViewConfiguarationStruct() {
         didSet{
-            self.setConfiguration(newConfiguration: configuration)
+            self.updateViewLayouts()
         }
     }
     //Sets the configuration during runtime, then tells the view to update itself and it's children.
@@ -101,7 +101,6 @@ open class SlideViewController: UIViewController {
         } else {
             self.configuration = newConfiguration!
         }
-        self.updateViewLayouts()
     }
     
     //MARK: Slider
